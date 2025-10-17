@@ -51,11 +51,13 @@ fun Netfloux(viewModel: MovieViewModel) {
 
     Scaffold (
         topBar = {
-            TopAppBar(title = { Text("Netfloux") })
+            //TopAppBar(title = { Text("Netfloux") })
         }
     ) {
-        padding ->  // La taille de la topbar qui ne prend pas d'espace concret
-        Box (modifier = Modifier.padding(padding)) {
+        padding ->
+        // La taille de la topbar qui ne prend pas d'espace concret
+        Column (modifier = Modifier.padding(padding)) {
+            TitleBanner()
             NavHost(navController = navController, startDestination = "List") {
                 composable("List") {
                     NetflouxList(movieState) {
