@@ -57,7 +57,10 @@ fun Netfloux(viewModel: MovieViewModel) {
         Box (modifier = Modifier.padding(padding)) {
             NavHost(navController = navController, startDestination = "List") {
                 composable("List") {
-                    NetflouxList(movieState) { movie -> viewModel.setSelectedMovie(movie) }
+                    NetflouxList(movieState) {
+                        movie -> viewModel.setSelectedMovie(movie)
+                        navController.navigate("Synopsis")
+                    }
                 }
                 composable("Synopsis") {
                     NetflouxSynopsis(movieState)
