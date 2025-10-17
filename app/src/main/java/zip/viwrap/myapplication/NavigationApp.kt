@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -101,65 +102,10 @@ fun NetflouxList(state: MovieState, onClickDetails: (movie: Movie) -> Unit) {
                 it.title.contains(searchTxt, ignoreCase = true)
             }
 
-            LazyColumn {
+            LazyRow {
                 items(filtered) {
                     movie ->
-                    var expanded by remember { mutableStateOf(false) }
-                    Card(
-                        modifier = Modifier.fillMaxWidth().padding(3.dp).height(100.dp)
-                            .clickable { onClickDetails(movie) }
-                    ) {
-                        Row {
-                            Box(
-                                modifier = Modifier.fillMaxHeight().width(75.dp).background(Color.Gray)
-                            ) {
-                                AsyncImage(
-                                    model = movie.imageUrl,
-                                    contentDescription = "Movie poster",
-                                    Modifier.fillMaxSize(),
-                                    contentScale = ContentScale.Fit
-                                )
-                            }
-                            Column(
-                                modifier = Modifier.padding(10.dp)
-                            ) {
-                                Text(
-                                    movie.title,
-                                    color = Color.Black,
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    modifier = Modifier.padding(10.dp, 2.dp)
-                                )
-                                Text(
-                                    movie.director,
-                                    color = Color.Black,
-                                    fontSize = 13.sp,
-                                    modifier = Modifier.padding(10.dp, 0.dp)
-                                )
-                                Text(
-                                    "Sortie : ${movie.year}",
-                                    color = Color.Black,
-                                    fontSize = 12.sp,
-                                    modifier = Modifier.padding(10.dp, 0.dp)
-                                )
-                                if (expanded) {
-                                    Text(movie.plot, color = Color.Black, fontSize = 11.sp,
-                                        modifier = Modifier.padding(10.dp, 0.dp))
-                                }
-                            }
-                            Box (
-                                Modifier.fillMaxSize().padding(10.dp).width(100.dp),
-                                contentAlignment = Alignment.TopEnd,
-                            ) {
-                                Button(onClick = { expanded = !expanded },
-                                    colors = ButtonDefaults.buttonColors(Color.Gray),
-                                    modifier = Modifier.requiredWidthIn(60.dp)
-                                ) {
-                                    Icon(imageVector = Icons.Filled.KeyboardArrowDown, contentDescription = "Check movie")
-                                }
-                            }
-                        }
-                    }
+                    BookCard(movie, onClickDetails)
                 }
             }
         }
