@@ -40,7 +40,7 @@ fun TitleBanner() {
     ) {
         Row {
             Icon(Icons.Outlined.Star, contentDescription = "StoryBloom", tint = Color.White, modifier = Modifier.size(50.dp))
-            Text("StoryBloom", fontSize = 48.sp, fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Bold, color = Color.White)
+            Text("StoryBloom", fontSize = 48.sp, fontWeight = FontWeight.Bold, color = Color.White)
         }
     }
 }
