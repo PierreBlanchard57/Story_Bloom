@@ -42,7 +42,7 @@ fun ClickableTag(text: String,clicked:Boolean){
 }
 
 @Composable
-fun Tag(text: String){
+fun NormalTag(text: String){
     Text(text, modifier = Modifier.clip(RoundedCornerShape(5.dp, 5.dp, 5.dp, 5.dp))
         .background(Color(0xFFA600FD))
         .padding(2.dp,2.dp,2.dp,2.dp), color = Color.White)

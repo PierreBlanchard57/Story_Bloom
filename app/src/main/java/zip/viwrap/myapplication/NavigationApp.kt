@@ -2,6 +2,9 @@ package zip.viwrap.myapplication
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.ScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,7 +17,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Lock
@@ -29,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -98,7 +104,7 @@ fun NetflouxList(state: MovieState, onClickDetails: (movie: Movie) -> Unit) {
     var searchTxt by remember { mutableStateOf("") }
 
     Column(modifier = Modifier
-        .fillMaxSize()
+        .fillMaxSize().verticalScroll(rememberScrollState())
     ) {
         TextField(value = searchTxt, onValueChange = { searchTxt = it }, modifier = Modifier
             .width(350.dp).clip(RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp)) ,
@@ -113,7 +119,19 @@ fun NetflouxList(state: MovieState, onClickDetails: (movie: Movie) -> Unit) {
                 Text("Rechercher un histoire...", color = Color.Gray)
             }
         )
-ClickableTag("Test",false)
+        Row {
+            ClickableTag("Tous",true)
+            ClickableTag("Aventure",false)
+            ClickableTag("Science",false)
+            ClickableTag("Nature",false)
+            ClickableTag("Fantasy",false)
+            ClickableTag("Educatif",false)
+            ClickableTag("Magie",false)
+        }
+        Row{
+            Icon(Icons.Filled.PlayArrow,"");
+            Text("Continuer la lecture")
+        }
         if (state.isLoading) {
             Box(modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center) {
@@ -124,10 +142,21 @@ ClickableTag("Test",false)
             val filtered = movies.filter {
                 it.title.contains(searchTxt, ignoreCase = true)
             }
+            StoryCard(listOf("Aventure","Magie"),"Le titre","auteur",20,90,99,0.2f)
+            LazyRow {
 
+                //items(filtered) {
+                //    movie ->
+                //    BookCard(movie, onClickDetails)
+               // }
+            }
+            Row{
+                Icon(Icons.Filled.Star,"");
+                Text("Toutes les histoires")
+            }
             LazyRow {
                 items(filtered) {
-                    movie ->
+                        movie ->
                     BookCard(movie, onClickDetails)
                 }
             }
