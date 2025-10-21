@@ -11,8 +11,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 
 @Composable
-fun NavigationButton(icon: ImageVector, text: String) {
-    Button({}, colors = ButtonColors(
+fun NavigationButton(icon: ImageVector, text: String, callback: () -> Unit) {
+    Button(callback, colors = ButtonColors(
         Color.Transparent, Color(0xFF423F3F),
         disabledContainerColor = Color.Transparent,
         disabledContentColor = Color.Transparent

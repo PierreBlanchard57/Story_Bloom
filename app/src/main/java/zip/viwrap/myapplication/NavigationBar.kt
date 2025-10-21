@@ -29,7 +29,7 @@ fun NavigationBar(buttons: List<NavigationItem>) {
             horizontalArrangement = Arrangement.spacedBy(20.dp, alignment = Alignment.CenterHorizontally)
         ) {
             buttons.forEach {
-                NavigationButton(it.icon, it.text)
+                NavigationButton(it.icon, it.text, it.callback)
             }
         }
     }

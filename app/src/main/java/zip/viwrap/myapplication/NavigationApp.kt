@@ -61,9 +61,9 @@ fun Netfloux(viewModel: MovieViewModel) {
         },
         bottomBar = {
             NavigationBar(listOf(
-                NavigationItem(Icons.Outlined.Home, "Accueil", {}),
-                NavigationItem(Icons.Outlined.Check, "Succès", {}),
-                NavigationItem(Icons.Outlined.Lock, "Contrôle", {})
+                NavigationItem(Icons.Outlined.Home, "Accueil", { navController.popBackStack(route = "List", inclusive = false) }),
+                NavigationItem(Icons.Outlined.Check, "Succès", { navController.navigate("Achievements") { popUpTo("List") } }),
+                NavigationItem(Icons.Outlined.Lock, "Contrôle", { navController.navigate("Control") { popUpTo("List") } })
             ))
         }
     ) {
@@ -80,6 +80,12 @@ fun Netfloux(viewModel: MovieViewModel) {
                 }
                 composable("Synopsis") {
                     NetflouxSynopsis(movieState)
+                }
+                composable("Achievements") {
+                    Text("Succès")
+                }
+                composable("Control") {
+                    Text("Contrôle")
                 }
             }
         }
