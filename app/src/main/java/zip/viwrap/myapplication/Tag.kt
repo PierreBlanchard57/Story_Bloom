@@ -38,7 +38,7 @@ fun ClickableTag(text: String,clicked:Boolean){
     Text(text, modifier = Modifier.clip(RoundedCornerShape(5.dp, 5.dp, 5.dp, 5.dp))
         .background(if(clicked) gradient else gradientWhite)
         .padding(2.dp,2.dp,2.dp,2.dp)
-        .clickable { clicked=!clicked }, color = Color.White)
+        .clickable { clicked=!clicked }, color = if(clicked)Color.White else Color.Black)
 }
 
 @Composable
