@@ -45,7 +45,7 @@ fun TitleBanner() {
         Row {
             Image(painter = painterResource(R.drawable.book),
                 contentDescription = "", modifier = Modifier.size(60.dp))
-            Text("StoryBloom", fontSize = 48.sp, fontWeight = FontWeight.Bold, color = Color.White)
+            Text("StoryBloom", fontSize = 48.sp, fontFamily = TitleFont.Family, color = Color.White)
         }
     }
 }

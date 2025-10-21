@@ -51,6 +51,10 @@ val Typography = Typography(
     labelSmall = defaultTypography.labelSmall.copy(fontFamily = DefaultFont.Family)
 )
 
+object TitleFont {
+    val Family = FontFamily(Font(R.font.inter_black_font))
+}
+
 @Composable
 fun AppTheme(
     content: @Composable () -> Unit
