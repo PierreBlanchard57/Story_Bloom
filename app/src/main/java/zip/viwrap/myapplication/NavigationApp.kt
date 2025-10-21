@@ -113,7 +113,7 @@ fun NetflouxList(state: MovieState, onClickDetails: (movie: Movie) -> Unit) {
                 Text("Rechercher un histoire...", color = Color.Gray)
             }
         )
-
+ClickableTag("Test",false)
         if (state.isLoading) {
             Box(modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center) {
