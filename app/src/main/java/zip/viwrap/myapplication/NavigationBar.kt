@@ -6,11 +6,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 data class NavigationItem(
     val icon: ImageVector,
@@ -22,9 +29,24 @@ data class NavigationItem(
 fun NavigationBar(buttons: List<NavigationItem>) {
     Column(
         modifier = Modifier.fillMaxWidth().background(MainBackground).padding(bottom = 10.dp),
-        verticalArrangement = Arrangement.spacedBy(100.dp, alignment = Alignment.CenterVertically),
+        //verticalArrangement = Arrangement.spacedBy(100.dp, alignment = Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Row (verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)){
+            Text("1", fontSize = 18.sp, color = Color.White, modifier = Modifier
+                .clip(RoundedCornerShape(5.dp, 5.dp, 5.dp, 5.dp)).
+                background(Color(0xFFA600FD)))
+            LinearProgressIndicator(
+                progress = { 0.6f },
+                gapSize = 0.dp,
+                drawStopIndicator = {},
+                color = Color(0xFFFD00D3),
+                strokeCap = StrokeCap.Square
+            )
+            Text("2",fontSize = 18.sp, color = Color.White, modifier = Modifier
+                .clip(RoundedCornerShape(5.dp, 5.dp, 5.dp, 5.dp)).
+                background(Color(0xFFA600FD)))
+        }
         Row(
             horizontalArrangement = Arrangement.spacedBy(20.dp, alignment = Alignment.CenterHorizontally)
         ) {
