@@ -2,27 +2,18 @@ package zip.viwrap.myapplication
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.ScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.Check
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -34,19 +25,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.*
-import androidx.navigation.navArgument
 import coil3.compose.AsyncImage
-import kotlinx.serialization.json.Json
 import zip.viwrap.myapplication.viewmodel.MovieState
 import zip.viwrap.myapplication.viewmodel.MovieViewModel
 
@@ -88,7 +73,7 @@ fun Netfloux(viewModel: MovieViewModel) {
                     NetflouxSynopsis(movieState)
                 }
                 composable("Achievements") {
-                    Text("Succès")
+                    StoryBloomAchievements()
                 }
                 composable("Control") {
                     Text("Contrôle")
@@ -161,6 +146,26 @@ fun NetflouxList(state: MovieState, onClickDetails: (movie: Movie) -> Unit) {
                 }
             }
         }
+
+    }
+}
+
+@Composable
+fun StoryBloomAchievements() {
+    Column (modifier = Modifier.fillMaxSize().padding(10.dp)) {
+        Text("Succès")
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            item { AchievementTile(painterResource(R.drawable.book), "99% de trucs.") }
+            item { AchievementTile(painterResource(R.drawable.book), "45 tomes de Vilieu lus.") }
+            item { AchievementTile(painterResource(R.drawable.book), "5 livres terminés.") }
+            item { AchievementTile(painterResource(R.drawable.book), "64% avant niveau 2.") }
+            item { AchievementTile(painterResource(R.drawable.book), "1 livre restant.") }
+        }
+        Text("Badges")
 
     }
 }
