@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.*
 
-val MainBackground = Color(0xFF25BE81)
+val MainBackground = Color(0xFFFFFFFF)
 val MainForeground = Color(0xFFFFFFFF)
 
 @Composable

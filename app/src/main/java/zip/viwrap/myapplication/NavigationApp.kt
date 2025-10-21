@@ -15,6 +15,9 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -55,6 +58,13 @@ fun Netfloux(viewModel: MovieViewModel) {
     Scaffold (
         topBar = {
             //TopAppBar(title = { Text("Netfloux") })
+        },
+        bottomBar = {
+            NavigationBar(listOf(
+                NavigationItem(Icons.Outlined.Home, "Accueil", {}),
+                NavigationItem(Icons.Outlined.Check, "Succès", {}),
+                NavigationItem(Icons.Outlined.Lock, "Contrôle", {})
+            ))
         }
     ) {
         padding ->
