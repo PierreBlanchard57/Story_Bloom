@@ -60,8 +60,9 @@ fun AchievementTile(painter: Painter, statistic: String) {
             softWrap = !ratio
         )
         if (ratio) {
+            val progress = (firstWord.dropLast(1).toFloatOrNull() ?: 0f) / 100f
             LinearProgressIndicator(
-                progress = { 0.46f },
+                progress = { progress },
                 gapSize = 0.dp,
                 drawStopIndicator = {},
                 strokeCap = StrokeCap.Square,
