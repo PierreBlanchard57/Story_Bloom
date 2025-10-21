@@ -2,15 +2,24 @@ package zip.viwrap.myapplication
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.absoluteOffset
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,10 +36,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.*
+import coil3.compose.AsyncImage
 
 // Tuile avec graphique du succès en bas à gauche, et statistique (avec nombre clé en évidence)
 @Composable
-fun AchievementTile(painter: Painter, statistic: String) {
+fun AchievementTile(width: Dp, painter: Painter, statistic: String) {
     val words = statistic.split(" ")
     val firstWord = words.first()
     val restWords = words.drop(1).joinToString(" ")
@@ -39,7 +49,7 @@ fun AchievementTile(painter: Painter, statistic: String) {
     Box(modifier = Modifier
         .clip(RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp))
         .background(color = Color(0xFFAC52DC))
-        .height(100.dp)) {
+        .height(100.dp).width(width)) {
         Image(painter = painter, contentDescription = "", modifier =
             Modifier.fillMaxSize().wrapContentSize(Alignment.BottomStart).size(90.dp)
                 .absoluteOffset((-20).dp, 10.dp).rotate(10f)
@@ -76,12 +86,52 @@ fun AchievementTile(painter: Painter, statistic: String) {
 
 // Tuile de badge (donc juste une image et un texte)
 @Composable
-fun BadgeTile() {
-
+fun BadgeTile(width: Dp, painter: Painter, title: String) {
+    Box(modifier = Modifier
+        .clip(RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp))
+        .width(width)
+        .aspectRatio(1f)
+        .background(color = Color(0xFFAC52DC))
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxSize()) {
+            Icon(painter = painter, contentDescription = "", tint = Color(0xAAFFFFFF))
+            Text(title, color = Color(0xFFFFFFFF), textAlign = TextAlign.Center)
+        }
+    }
 }
 
 // Tuile horizontale
 @Composable
-fun ReaderProgressTile() {
-
+fun ReaderProgressTile(book: Movie) {
+    Box(Modifier
+        .clip(RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp))
+        .background(color = Color(0xFFAC52DC))
+        .fillMaxWidth()
+        .requiredHeight(80.dp)
+    ) {
+        Box(modifier = Modifier.padding(10.dp)) {
+            Row {
+                AsyncImage(model = book.imageUrl, contentDescription = "Couverture du bouquin",
+                    modifier = Modifier.fillMaxHeight().aspectRatio(1f))
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.SpaceEvenly) {
+                    Row {
+                        Text(book.title, color = Color(0xFFFFFFFF))
+                        Spacer(Modifier.weight(1f))
+                        Text("90%", fontSize = 30.sp, fontFamily = TitleFont.Family, color = Color(0xFFFFFFFF))
+                    }
+                    LinearProgressIndicator(
+                        progress = { 0.3f },
+                        gapSize = 0.dp,
+                        drawStopIndicator = {},
+                        strokeCap = StrokeCap.Square,
+                        modifier = Modifier.fillMaxWidth().height(10.dp)
+                    )
+                }
+            }
+        }
+    }
 }

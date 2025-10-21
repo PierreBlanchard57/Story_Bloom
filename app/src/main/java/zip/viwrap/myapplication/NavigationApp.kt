@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -25,7 +26,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -73,7 +76,7 @@ fun Netfloux(viewModel: MovieViewModel) {
                     NetflouxSynopsis(movieState)
                 }
                 composable("Achievements") {
-                    StoryBloomAchievements()
+                    StoryBloomAchievements(movieState)
                 }
                 composable("Control") {
                     Text("Contrôle")
@@ -151,22 +154,49 @@ fun NetflouxList(state: MovieState, onClickDetails: (movie: Movie) -> Unit) {
 }
 
 @Composable
-fun StoryBloomAchievements() {
-    Column (modifier = Modifier.fillMaxSize().padding(10.dp)) {
-        Text("Succès")
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            item { AchievementTile(painterResource(R.drawable.book), "99% de trucs.") }
-            item { AchievementTile(painterResource(R.drawable.book), "45 tomes de Vilieu lus.") }
-            item { AchievementTile(painterResource(R.drawable.book), "5 livres terminés.") }
-            item { AchievementTile(painterResource(R.drawable.book), "64% avant niveau 2.") }
-            item { AchievementTile(painterResource(R.drawable.book), "1 livre restant.") }
+fun StoryBloomAchievements(state: MovieState) {
+    LazyColumn (modifier = Modifier.fillMaxWidth().padding(10.dp), verticalArrangement =
+        Arrangement.spacedBy(10.dp)) {
+        item { Text("Succès") }
+        item {
+            val spacing = 10.dp
+            val columns = 2
+            FlowRow (
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+                val totalSpacing = spacing * (columns - 1)
+                val w = (screenWidth - totalSpacing - 20.dp /*padding*/) / columns
+                AchievementTile(w, painterResource(R.drawable.book), "99% de trucs.")
+                AchievementTile(w, painterResource(R.drawable.book), "45 tomes de Vilieu lus.")
+                AchievementTile(w, painterResource(R.drawable.book), "5 livres terminés.")
+                AchievementTile(w, painterResource(R.drawable.book), "64% avant niveau 2.")
+                AchievementTile(w, painterResource(R.drawable.book), "1 livre restant.")
+            }
         }
-        Text("Badges")
-
+        item { Text("Badges") }
+        item {
+            val spacing = 10.dp
+            val columns = 4
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+                val totalSpacing = spacing * (columns - 1)
+                val w = (screenWidth - totalSpacing - 20.dp /* padding */) / columns
+                BadgeTile(w, rememberVectorPainter(Icons.Default.Star), "Premiers pas")
+                BadgeTile(w, rememberVectorPainter(Icons.Default.Face), "Dévoreur de livres")
+                BadgeTile(w, rememberVectorPainter(Icons.Default.Lock), "Verrouillé")
+            }
+        }
+        item { Text("En cours") }
+        items(state.movies) {
+            ReaderProgressTile(it)
+        }
     }
 }
 
