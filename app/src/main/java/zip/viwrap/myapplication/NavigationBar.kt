@@ -37,22 +37,7 @@ fun NavigationBar(buttons: List<NavigationItem>) {
         //verticalArrangement = Arrangement.spacedBy(100.dp, alignment = Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row (verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)){
-
-            Text("1", fontSize = 18.sp, color = Color.White, modifier = Modifier
-                .clip(RoundedCornerShape(10.dp, 10.dp, 10.dp, 10.dp)).
-                background(Color(0xFFA600FD)).width(20.dp).height(20.dp), textAlign = TextAlign.Center)
-            LinearProgressIndicator(
-                progress = { 0.6f },
-                gapSize = 0.dp,
-                drawStopIndicator = {},
-                color = Color(0xFFFD00D3),
-                strokeCap = StrokeCap.Square
-            )
-            Text("2",fontSize = 18.sp, color = Color.White, modifier = Modifier
-                .clip(RoundedCornerShape(10.dp, 10.dp, 10.dp, 10.dp)).
-                background(Color(0xFFA600FD)).width(20.dp).height(20.dp), textAlign = TextAlign.Center)
-        }
+        LevelBar(853,0.6f)
         Row(
             horizontalArrangement = Arrangement.spacedBy(20.dp, alignment = Alignment.CenterHorizontally)
         ) {
