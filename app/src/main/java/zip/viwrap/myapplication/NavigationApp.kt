@@ -17,6 +17,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -46,6 +47,7 @@ fun Netfloux(viewModel: StoryViewModel) {
     // c'est équivalent à un système de property listener (ou de "hook" en React).
 
     val storyState = viewModel.stateFlow.collectAsState().value
+
 
     Scaffold (
         topBar = {
@@ -88,7 +90,7 @@ fun Netfloux(viewModel: StoryViewModel) {
 @Composable
 fun NetflouxList(state: StoryState, onClickDetails: (story: Story) -> Unit) {
     var searchTxt by remember { mutableStateOf("") }
-
+    var list = remember { mutableStateListOf<String>() }
     Column(modifier = Modifier
         .fillMaxSize().verticalScroll(rememberScrollState())
     ) {
@@ -106,13 +108,12 @@ fun NetflouxList(state: StoryState, onClickDetails: (story: Story) -> Unit) {
             }
         )
         Row {
-            ClickableTag("Tous",true)
-            ClickableTag("Aventure",false)
-            ClickableTag("Science",false)
-            ClickableTag("Nature",false)
-            ClickableTag("Fantasy",false)
-            ClickableTag("Educatif",false)
-            ClickableTag("Magie",false)
+            ClickableTag("Aventure",false, list)
+            ClickableTag("Science",false, list)
+            ClickableTag("Nature",false, list)
+            ClickableTag("Fantasy",false, list)
+            ClickableTag("Educatif",false, list)
+            ClickableTag("Magie",false, list)
         }
         Row{
             Icon(Icons.Filled.PlayArrow,"",tint = Color(0xFF4CAF50))
@@ -125,12 +126,23 @@ fun NetflouxList(state: StoryState, onClickDetails: (story: Story) -> Unit) {
             }
         } else {
             val stories = state.stories
-            val filtered = stories.filter {
+            val titleFiltered = stories.filter {
                 it.title.contains(searchTxt, ignoreCase = true)
+            }
+            val tagFiltered=titleFiltered.filter {
+                story->
+                if(list.size==0)true
+                else{
+                    var ok=true
+                    list.forEach(){
+                        if(!story.tags.contains(it))ok=false
+                    }
+                    ok
+                }
             }
             LazyRow {
 
-                items(filtered) {
+                items(tagFiltered) {
                         story ->
                     StoryCard(story,0.6f)
                     //BookCard(story, onClickDetails)
@@ -141,7 +153,7 @@ fun NetflouxList(state: StoryState, onClickDetails: (story: Story) -> Unit) {
                 Text("Toutes les histoires")
             }
             LazyRow {
-                items(filtered) {
+                items(tagFiltered) {
                         story ->
                     StoryCard(story,0.6f)
                     //BookCard(story, onClickDetails)
