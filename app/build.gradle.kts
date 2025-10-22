@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     kotlin("plugin.serialization")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -41,6 +42,11 @@ android {
 }
 
 dependencies {
+    // Room pour BDD SQL locale (pour les settings/cache utilisateur)
+    val room_version = "2.8.1"
+    implementation("androidx.room:room-runtime:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
+
     implementation(platform(libs.ktor.bom))
     implementation(libs.ktor.client.android)
     implementation(libs.ktor.client.serialization)
