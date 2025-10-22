@@ -79,7 +79,7 @@ fun Netfloux(viewModel: StoryViewModel) {
                     StoryBloomAchievements(storyState)
                 }
                 composable("Control") {
-                    Text("Contrôle")
+                    StoryBloomControl(storyState)
                 }
             }
         }
@@ -208,6 +208,20 @@ fun StoryBloomAchievements(state: StoryState) {
         items(state.stories) {
             ReaderProgressTile(it)
         }
+    }
+}
+
+@Composable
+fun StoryBloomControl(movieState: StoryState) {
+    LazyColumn (modifier = Modifier.fillMaxWidth().padding(10.dp), verticalArrangement =
+        Arrangement.spacedBy(10.dp)) {
+        item { AchievementTile(null, painterResource(R.drawable.book), "15min de temps de lecture aujourd'hui.") }
+        item { WarningBar("15 mins restantes.") }
+        item { Text("Paramètres de contrôle") }
+        item { LockedSliderEditor("Limite quotidienne", "Temps max de lecture par jour") }
+        item { PreferenceEditor(rememberVectorPainter(Icons.Filled.Notifications), "Notifications", "Alerte de limite de temps", 1) }
+        item { PreferenceEditor(rememberVectorPainter(Icons.Filled.Refresh), "Lecture automatique", "Passer automatiquement à la page suivante.", 1) }
+        item { PreferenceEditor(rememberVectorPainter(Icons.Filled.Warning), "Filtre d'age", "Afficher uniquement histoires adaptées.", 1) }
     }
 }
 

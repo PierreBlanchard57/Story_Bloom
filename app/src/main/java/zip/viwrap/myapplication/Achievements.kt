@@ -40,16 +40,20 @@ import coil3.compose.AsyncImage
 
 // Tuile avec graphique du succès en bas à gauche, et statistique (avec nombre clé en évidence)
 @Composable
-fun AchievementTile(width: Dp, painter: Painter, statistic: String) {
+fun AchievementTile(width: Dp?, painter: Painter, statistic: String) {
     val words = statistic.split(" ")
     val firstWord = words.first()
     val restWords = words.drop(1).joinToString(" ")
     val ratio = firstWord.endsWith("%");
 
-    Box(modifier = Modifier
+    // Si on n'a pas de largeur, prendre toute la largeur...
+    var boxModifier = Modifier
         .clip(RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp))
         .background(color = Color(0xFFAC52DC))
-        .height(100.dp).width(width)) {
+        .height(100.dp)
+    boxModifier = if (width != null) boxModifier.width(width) else boxModifier.fillMaxWidth()
+
+    Box(modifier = boxModifier) {
         Image(painter = painter, contentDescription = "", modifier =
             Modifier.fillMaxSize().wrapContentSize(Alignment.BottomStart).size(90.dp)
                 .absoluteOffset((-20).dp, 10.dp).rotate(10f)
@@ -128,6 +132,8 @@ fun ReaderProgressTile(book: Story) {
                         gapSize = 0.dp,
                         drawStopIndicator = {},
                         strokeCap = StrokeCap.Square,
+                        color = Color(0xFFFF9E30),
+                        trackColor = Color(0x80FFFFFF),
                         modifier = Modifier.fillMaxWidth().height(10.dp)
                     )
                 }
