@@ -5,7 +5,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
@@ -16,6 +19,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -33,9 +38,10 @@ fun NavigationBar(buttons: List<NavigationItem>) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row (verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)){
+
             Text("1", fontSize = 18.sp, color = Color.White, modifier = Modifier
-                .clip(RoundedCornerShape(5.dp, 5.dp, 5.dp, 5.dp)).
-                background(Color(0xFFA600FD)))
+                .clip(RoundedCornerShape(10.dp, 10.dp, 10.dp, 10.dp)).
+                background(Color(0xFFA600FD)).width(20.dp).height(20.dp), textAlign = TextAlign.Center)
             LinearProgressIndicator(
                 progress = { 0.6f },
                 gapSize = 0.dp,
@@ -44,8 +50,8 @@ fun NavigationBar(buttons: List<NavigationItem>) {
                 strokeCap = StrokeCap.Square
             )
             Text("2",fontSize = 18.sp, color = Color.White, modifier = Modifier
-                .clip(RoundedCornerShape(5.dp, 5.dp, 5.dp, 5.dp)).
-                background(Color(0xFFA600FD)))
+                .clip(RoundedCornerShape(10.dp, 10.dp, 10.dp, 10.dp)).
+                background(Color(0xFFA600FD)).width(20.dp).height(20.dp), textAlign = TextAlign.Center)
         }
         Row(
             horizontalArrangement = Arrangement.spacedBy(20.dp, alignment = Alignment.CenterHorizontally)

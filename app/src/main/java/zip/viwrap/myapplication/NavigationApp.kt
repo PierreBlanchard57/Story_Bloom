@@ -117,7 +117,7 @@ fun NetflouxList(state: MovieState, onClickDetails: (movie: Movie) -> Unit) {
             ClickableTag("Magie",false)
         }
         Row{
-            Icon(Icons.Filled.PlayArrow,"");
+            Icon(Icons.Filled.PlayArrow,"",tint = Color(0xFF4CAF50))
             Text("Continuer la lecture")
         }
         if (state.isLoading) {
@@ -139,7 +139,7 @@ fun NetflouxList(state: MovieState, onClickDetails: (movie: Movie) -> Unit) {
                // }
             }
             Row{
-                Icon(Icons.Filled.Star,"");
+                Icon(Icons.Filled.Star,"", tint = Color(0xFFFFC107));
                 Text("Toutes les histoires")
             }
             LazyRow {

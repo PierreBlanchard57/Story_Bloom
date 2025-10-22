@@ -22,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
@@ -38,7 +39,7 @@ fun StoryCard(tags:List<String>,title:String,author:String,
         .width(180.dp)
         ) {
         Box(Modifier.paint(painter = painterResource(R.drawable.ic_launcher_background)).fillMaxWidth()){
-            Row {
+            Row (horizontalArrangement = Arrangement.spacedBy(5.dp)){
                 tags.forEach(){
                         tag->
                     NormalTag(tag)
