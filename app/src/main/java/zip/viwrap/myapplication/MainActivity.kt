@@ -14,7 +14,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import zip.viwrap.myapplication.ui.theme.ExampleApplicationTheme
-import zip.viwrap.myapplication.viewmodel.MovieViewModel
+import zip.viwrap.myapplication.viewmodel.StoryViewModel
 
 // Référence :
 // https://gitlab.intech.dev/paul.dardaine/netfloux-ihm
@@ -70,7 +70,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val viewmodel = MovieViewModel()
+        val viewmodel = StoryViewModel()
         setContent {
             AppTheme {
                 Netfloux(viewmodel)

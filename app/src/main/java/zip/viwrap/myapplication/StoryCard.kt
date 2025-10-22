@@ -28,32 +28,37 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
 
 @Composable
-fun StoryCard(tags:List<String>,title:String,author:String,
-              duration:Int,minAge:Int,maxAge:Int,progression:Float){
+fun StoryCard(story: Story,progression:Float){
     Column(modifier = Modifier.padding(10.dp,10.dp,10.dp,10.dp).border(1.dp,Color.Gray, shape = RoundedCornerShape(10.dp, 10.dp, 10.dp, 10.dp))
         .width(180.dp)
         ) {
-        Box(Modifier.paint(painter = painterResource(R.drawable.ic_launcher_background)).fillMaxWidth()){
+
+        Box(Modifier.fillMaxWidth()){
+            AsyncImage(model = story.coverImage, contentDescription = "",
+                modifier = Modifier.fillMaxWidth().height(200.dp)
+            , contentScale = ContentScale.Crop,)
             Row (horizontalArrangement = Arrangement.spacedBy(5.dp)){
-                tags.forEach(){
-                        tag->
-                    NormalTag(tag)
-                }
-            }
+               story.tags.forEach(){
+                       tag->
+                   NormalTag(tag)
+               }
+           }
 
         }
-        Text(title, fontSize = 18.sp, modifier = Modifier.padding(10.dp,10.dp,0.dp,0.dp))
-        Text(author, color = Color.Gray,modifier = Modifier.padding(10.dp,10.dp,0.dp,10.dp))
+        Text(story.title, fontSize = 18.sp, modifier = Modifier.padding(10.dp,10.dp,0.dp,0.dp))
+        Text(story.author, color = Color.Gray,modifier = Modifier.padding(10.dp,10.dp,0.dp,10.dp))
         Row {
             Icon(Icons.Rounded.Info,"")
-            Text("${duration} min",color = Color.Gray, modifier = Modifier.padding(0.dp,0.dp,10.dp,0.dp))
+            Text("${story.duration} min",color = Color.Gray, modifier = Modifier.padding(0.dp,0.dp,10.dp,0.dp))
             Icon(Icons.Rounded.AccountCircle,"")
-            Text("${minAge}-${maxAge} ans",color = Color.Gray)
+            Text("${story.minAge}-${story.maxAge} ans",color = Color.Gray)
         }
         Row(
             modifier = Modifier.fillMaxWidth().padding(10.dp,0.dp,10.dp,0.dp),

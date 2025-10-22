@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -35,19 +33,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.*
 import coil3.compose.AsyncImage
-import zip.viwrap.myapplication.viewmodel.MovieState
-import zip.viwrap.myapplication.viewmodel.MovieViewModel
+import zip.viwrap.myapplication.viewmodel.StoryState
+import zip.viwrap.myapplication.viewmodel.StoryViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Netfloux(viewModel: MovieViewModel) {
+fun Netfloux(viewModel: StoryViewModel) {
     val navController = rememberNavController()
 
     // pour la movie on peut aussi utiliser un "remember" pour voir les changements.
     // Un "signal" peut exister à chaque changement d'une variable remember avec un "LaunchEffect"
     // c'est équivalent à un système de property listener (ou de "hook" en React).
 
-    val movieState = viewModel.stateFlow.collectAsState().value
+    val storyState = viewModel.stateFlow.collectAsState().value
 
     Scaffold (
         topBar = {
@@ -67,16 +65,16 @@ fun Netfloux(viewModel: MovieViewModel) {
             TitleBanner()
             NavHost(navController = navController, startDestination = "List") {
                 composable("List") {
-                    NetflouxList(movieState) {
-                        movie -> viewModel.setSelectedMovie(movie)
+                    NetflouxList(storyState) {
+                        movie -> viewModel.setSelectedStory(movie)
                         navController.navigate("Synopsis")
                     }
                 }
                 composable("Synopsis") {
-                    NetflouxSynopsis(movieState)
+                    NetflouxSynopsis(storyState)
                 }
                 composable("Achievements") {
-                    StoryBloomAchievements(movieState)
+                    StoryBloomAchievements(storyState)
                 }
                 composable("Control") {
                     Text("Contrôle")
@@ -88,7 +86,7 @@ fun Netfloux(viewModel: MovieViewModel) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NetflouxList(state: MovieState, onClickDetails: (movie: Movie) -> Unit) {
+fun NetflouxList(state: StoryState, onClickDetails: (story: Story) -> Unit) {
     var searchTxt by remember { mutableStateOf("") }
 
     Column(modifier = Modifier
@@ -104,7 +102,7 @@ fun NetflouxList(state: MovieState, onClickDetails: (movie: Movie) -> Unit) {
                     modifier = Modifier.clickable { searchTxt = "" }
                 )
             }, placeholder = {
-                Text("Rechercher un histoire...", color = Color.Gray)
+                Text("Rechercher une histoire...", color = Color.Gray)
             }
         )
         Row {
@@ -126,17 +124,17 @@ fun NetflouxList(state: MovieState, onClickDetails: (movie: Movie) -> Unit) {
                 CircularProgressIndicator()
             }
         } else {
-            val movies = state.movies
-            val filtered = movies.filter {
+            val stories = state.stories
+            val filtered = stories.filter {
                 it.title.contains(searchTxt, ignoreCase = true)
             }
-            StoryCard(listOf("Aventure","Magie"),"Le titre","auteur",20,90,99,0.2f)
             LazyRow {
 
-                //items(filtered) {
-                //    movie ->
-                //    BookCard(movie, onClickDetails)
-               // }
+                items(filtered) {
+                        story ->
+                    StoryCard(story,0.6f)
+                    //BookCard(story, onClickDetails)
+                }
             }
             Row{
                 Icon(Icons.Filled.Star,"", tint = Color(0xFFFFC107));
@@ -144,8 +142,9 @@ fun NetflouxList(state: MovieState, onClickDetails: (movie: Movie) -> Unit) {
             }
             LazyRow {
                 items(filtered) {
-                        movie ->
-                    BookCard(movie, onClickDetails)
+                        story ->
+                    StoryCard(story,0.6f)
+                    //BookCard(story, onClickDetails)
                 }
             }
         }
@@ -154,7 +153,7 @@ fun NetflouxList(state: MovieState, onClickDetails: (movie: Movie) -> Unit) {
 }
 
 @Composable
-fun StoryBloomAchievements(state: MovieState) {
+fun StoryBloomAchievements(state: StoryState) {
     LazyColumn (modifier = Modifier.fillMaxWidth().padding(10.dp), verticalArrangement =
         Arrangement.spacedBy(10.dp)) {
         item { Text("Succès") }
@@ -194,30 +193,30 @@ fun StoryBloomAchievements(state: MovieState) {
             }
         }
         item { Text("En cours") }
-        items(state.movies) {
+        items(state.stories) {
             ReaderProgressTile(it)
         }
     }
 }
 
 @Composable
-fun NetflouxSynopsis(movieState: MovieState) {
-    val movie = movieState.selectedMovie
+fun NetflouxSynopsis(movieState: StoryState) {
+    val movie = movieState.selectedStory
     if (movie != null) {
         Column (modifier = Modifier.fillMaxSize().padding(20.dp)) {
             Text(movie.title, fontSize = 20.sp)
             AsyncImage(
-                model = movie.imageUrl,
+                model = movie.coverImage,
                 contentDescription = "Movie poster",
                 Modifier.fillMaxWidth(),
                 contentScale = ContentScale.Fit
             )
-            Text(movie.plot, textAlign = TextAlign.Justify, modifier = Modifier.padding(8.dp))
+            Text(movie.synopsis, textAlign = TextAlign.Justify, modifier = Modifier.padding(8.dp))
             Box(modifier = Modifier
                 .background(Color.Gray)
                 .requiredHeight(1.dp)
                 .fillMaxWidth())
-            Text(movie.director, modifier = Modifier.padding(8.dp))
+            Text(movie.author, modifier = Modifier.padding(8.dp))
         }
     } else {
         Text("Aucun film à afficher.")

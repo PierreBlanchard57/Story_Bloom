@@ -1,31 +1,17 @@
 {
   "Stories": [
     {
-      "Title": "BarbaPapa",
-      "ID": "1",
-      "Author": "JesaisPas",
-      "CoverImage": "https://th.bing.com/th/id/R.9612e936f0be956412a0b46f4f79b62f?rik=AsSQiml%2f%2fAS5NA&riu=http%3a%2f%2fwww.imagespourtoi.com%2flesimages%2fbarbapapa%2fimage-barbapapa-13.jpg",
-      "Pages": "30",
-      "Synopsis": "...",
-      "Duration": "20",
-      "MinAge": "90",
-      "MaxAge": "99",
-      "Tags": [
+      "title": "BarbaPapa",
+      "id": "1",
+      "author": "JesaisPas",
+      "coverImage": "https://picsum.photos/200/300?grayscale",
+      "pages": "30",
+      "synopsis": "...",
+      "duration": "20",
+      "minAge": "60",
+      "maxAge": "70",
+      "tags": [
         "Aventure"
-      ]
-    },
-    {
-      "Title": "",
-      "ID": "",
-      "Author": "",
-      "CoverImage": "",
-      "Pages": "",
-      "Synopsis": "",
-      "Duration": "",
-      "MinAge": "",
-      "MaxAge": "",
-      "Tags": [
-        ""
       ]
     }
   ]

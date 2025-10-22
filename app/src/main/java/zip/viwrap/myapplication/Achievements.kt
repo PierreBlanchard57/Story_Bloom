@@ -104,7 +104,7 @@ fun BadgeTile(width: Dp, painter: Painter, title: String) {
 
 // Tuile horizontale
 @Composable
-fun ReaderProgressTile(book: Movie) {
+fun ReaderProgressTile(book: Story) {
     Box(Modifier
         .clip(RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp))
         .background(color = Color(0xFFAC52DC))
@@ -113,7 +113,7 @@ fun ReaderProgressTile(book: Movie) {
     ) {
         Box(modifier = Modifier.padding(10.dp)) {
             Row {
-                AsyncImage(model = book.imageUrl, contentDescription = "Couverture du bouquin",
+                AsyncImage(model = book.coverImage, contentDescription = "Couverture du bouquin",
                     modifier = Modifier.fillMaxHeight().aspectRatio(1f))
                 Column(
                     modifier = Modifier.fillMaxSize(),
