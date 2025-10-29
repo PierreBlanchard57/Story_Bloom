@@ -14,6 +14,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import zip.viwrap.myapplication.ui.theme.ExampleApplicationTheme
+import zip.viwrap.myapplication.userpersist.BookProgressViewModel
+import zip.viwrap.myapplication.userpersist.UserPersistenceProvider
 import zip.viwrap.myapplication.viewmodel.StoryViewModel
 
 // Référence :
@@ -70,7 +72,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+        // Initialisation du viewmodel des données du serveur.
         val viewmodel = StoryViewModel()
+
+        // Initialisation du viewmodel des données persistentes.
+        val db = UserPersistenceProvider.getDatabase(applicationContext)
+        val dao = db.getBookProgressDao()
+        val dbviewmodel = BookProgressViewModel.getViewModel(dao)
+
         setContent {
             AppTheme {
                 Netfloux(viewmodel)
