@@ -67,13 +67,13 @@ fun Netfloux(viewModel: StoryViewModel) {
             TitleBanner()
             NavHost(navController = navController, startDestination = "List") {
                 composable("List") {
-                    NetflouxList(storyState) {
-                        movie -> viewModel.setSelectedStory(movie)
-                        navController.navigate("Synopsis")
+                    StoryBloomList(storyState) {
+                        story -> viewModel.setSelectedStory(story)
+                        navController.navigate("Details")
                     }
                 }
-                composable("Synopsis") {
-                    NetflouxSynopsis(storyState)
+                composable("Details") {
+                    StoryBloomDetails(storyState)
                 }
                 composable("Achievements") {
                     StoryBloomAchievements(storyState)
@@ -88,7 +88,7 @@ fun Netfloux(viewModel: StoryViewModel) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NetflouxList(state: StoryState, onClickDetails: (story: Story) -> Unit) {
+fun StoryBloomList(state: StoryState, onClickDetails: (story: Story) -> Unit) {
     var searchTxt by remember { mutableStateOf("") }
     var list = remember { mutableStateListOf<String>() }
     Column(modifier = Modifier
@@ -131,7 +131,7 @@ fun NetflouxList(state: StoryState, onClickDetails: (story: Story) -> Unit) {
             }
             val tagFiltered=titleFiltered.filter {
                 story->
-                if(list.size==0)true
+                if(list.isEmpty())true
                 else{
                     var ok=true
                     list.forEach(){
@@ -141,11 +141,9 @@ fun NetflouxList(state: StoryState, onClickDetails: (story: Story) -> Unit) {
                 }
             }
             LazyRow {
-
                 items(tagFiltered) {
                         story ->
-                    StoryCard(story,0.6f)
-                    //BookCard(story, onClickDetails)
+                    StoryCard(story,0.6f,onClickDetails)
                 }
             }
             Row{
@@ -155,7 +153,7 @@ fun NetflouxList(state: StoryState, onClickDetails: (story: Story) -> Unit) {
             LazyRow {
                 items(tagFiltered) {
                         story ->
-                    StoryCard(story,0.6f)
+                    StoryCard(story,0.6f,onClickDetails)
                     //BookCard(story, onClickDetails)
                 }
             }
@@ -226,8 +224,8 @@ fun StoryBloomControl(movieState: StoryState) {
 }
 
 @Composable
-fun NetflouxSynopsis(movieState: StoryState) {
-    val movie = movieState.selectedStory
+fun StoryBloomDetails(storyState: StoryState) {
+    val movie = storyState.selectedStory
     if (movie != null) {
         Column (modifier = Modifier.fillMaxSize().padding(20.dp)) {
             Text(movie.title, fontSize = 20.sp)
