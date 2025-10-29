@@ -37,7 +37,7 @@ fun NavigationBar(buttons: List<NavigationItem>) {
         //verticalArrangement = Arrangement.spacedBy(100.dp, alignment = Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        LevelBar(853,0.6f)
+        LevelBar()
         Row(
             horizontalArrangement = Arrangement.spacedBy(20.dp, alignment = Alignment.CenterHorizontally)
         ) {

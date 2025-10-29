@@ -16,13 +16,17 @@ class BookProgressViewModel(private val bookProgressDao: BookProgressDao) : View
     }
 
     // Flux réactif du niveau du joueur selon la persistence.
-    val level = bookProgressDao.getLevel()
+    val levelState: StateFlow<Int> = bookProgressDao.getLevel().stateIn(
+        viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = 0
+    )
 
     companion object {
-        private lateinit var instance: ViewModel
+        private lateinit var instance: BookProgressViewModel
 
         @JvmStatic
-        fun getViewModel(bookProgressDao: BookProgressDao? = null): ViewModel {
+        fun getViewModel(bookProgressDao: BookProgressDao? = null): BookProgressViewModel {
             if (::instance.isInitialized)
                 return instance
             instance = BookProgressViewModel(bookProgressDao!!)
