@@ -140,7 +140,11 @@ fun StoryBloomList(state: StoryState, onClickDetails: (story: Story) -> Unit) {
                     ok
                 }
             }
+            val story=Story("test",5,"auteur","https://picsum.photos/200/300?grayscale",85,
+                "non",6,2,8,listOf())
+            StoryCard(story,0.6f,onClickDetails)
             LazyRow {
+
                 items(tagFiltered) {
                         story ->
                     StoryCard(story,0.6f,onClickDetails)
