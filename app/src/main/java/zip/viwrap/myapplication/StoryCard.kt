@@ -23,6 +23,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,9 +37,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import zip.viwrap.myapplication.userpersist.BookProgressViewModel
 
 @Composable
-fun StoryCard(story: Story,progression:Float,onclick:(Story)-> Unit){
+fun StoryCard(story: Story, onclick: (Story) -> Unit){
+    val dbvm = BookProgressViewModel.getViewModel()
+    val pagesRead by dbvm.getPagesRead(story.id).collectAsState()
+    val progress = if (story.pages > 0) pagesRead.toFloat() / story.pages else 0f
+
     Column(modifier = Modifier.padding(10.dp,10.dp,10.dp,10.dp).border(1.dp,Color.Gray, shape = RoundedCornerShape(10.dp, 10.dp, 10.dp, 10.dp))
         .width(180.dp).clickable(){onclick(story)}
         ) {
@@ -66,10 +74,10 @@ fun StoryCard(story: Story,progression:Float,onclick:(Story)-> Unit){
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(text = "Progression",color = Color.Gray)
-            Text(text = "${(progression * 100).toInt()}%",color = Color.Gray)
+            Text(text = "${(progress * 100).toInt()}%",color = Color.Gray)
         }
         LinearProgressIndicator(
-            progress = { progression },
+            progress = { progress },
             color = Color.Black,
             gapSize = 0.dp,
             strokeCap = StrokeCap.Butt,

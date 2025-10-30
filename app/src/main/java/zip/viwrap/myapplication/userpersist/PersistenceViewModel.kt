@@ -22,6 +22,14 @@ class BookProgressViewModel(private val bookProgressDao: BookProgressDao) : View
         initialValue = 0
     )
 
+    fun getPagesRead(id: Int): StateFlow<Int> {
+        return bookProgressDao.getPagesRead(id).stateIn(
+            viewModelScope,
+            started = SharingStarted.Lazily,
+            initialValue = 0
+        )
+    }
+
     companion object {
         private lateinit var instance: BookProgressViewModel
 
