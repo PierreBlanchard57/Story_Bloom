@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import zip.viwrap.myapplication.Story
 import zip.viwrap.myapplication.api.StoriesAPI
@@ -13,8 +14,10 @@ import zip.viwrap.myapplication.network.StateManager
 class StoryViewModel: ViewModel() {
     private val storiesMutableStateFlow= MutableStateFlow(StoryState())
 
-    val stateFlow: StateFlow<StoryState>
+    val storiesStateFlow: StateFlow<StoryState>
         get() = storiesMutableStateFlow.asStateFlow()
+
+
 
     private var storyState: StoryState
         get() = storiesMutableStateFlow.value
@@ -22,11 +25,13 @@ class StoryViewModel: ViewModel() {
             storiesMutableStateFlow.value = value
         }
 
+
     init {
         viewModelScope.launch {
             getStoryList()
         }
     }
+
 
     fun getStoryList() {
         storyState = storyState.copy(isLoading = true)

@@ -37,7 +37,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import kotlinx.coroutines.flow.StateFlow
 import zip.viwrap.myapplication.userpersist.BookProgressViewModel
+import zip.viwrap.myapplication.viewmodel.StoryViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun StoryCard(story: Story, onclick: (Story) -> Unit){
@@ -45,6 +48,7 @@ fun StoryCard(story: Story, onclick: (Story) -> Unit){
     val pagesRead by dbvm.getPagesRead(story.id).collectAsState()
     val progress = if (story.pages > 0) pagesRead.toFloat() / story.pages else 0f
 
+    val storyVm : StoryViewModel=viewModel()
     Column(modifier = Modifier.padding(10.dp,10.dp,10.dp,10.dp).border(1.dp,Color.Gray, shape = RoundedCornerShape(10.dp, 10.dp, 10.dp, 10.dp))
         .width(180.dp).clickable(){onclick(story)}
         ) {

@@ -11,10 +11,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -32,6 +35,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.*
 import coil3.compose.AsyncImage
 import zip.viwrap.myapplication.viewmodel.StoryState
@@ -39,21 +45,40 @@ import zip.viwrap.myapplication.viewmodel.StoryViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Netfloux(viewModel: StoryViewModel) {
+fun StoryBloom() {
     val navController = rememberNavController()
 
     // pour la movie on peut aussi utiliser un "remember" pour voir les changements.
     // Un "signal" peut exister à chaque changement d'une variable remember avec un "LaunchEffect"
     // c'est équivalent à un système de property listener (ou de "hook" en React).
+    val viewModel: StoryViewModel= viewModel()
+    val storyState = viewModel.storiesStateFlow.collectAsState().value
 
-    val storyState = viewModel.stateFlow.collectAsState().value
-
+    val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+    val showBottomBar = when (currentRoute) {
+        "List", "Achievements", "Control" -> true
+        else -> false
+    }
 
     Scaffold (
         topBar = {
-            //TopAppBar(title = { Text("Netfloux") })
+            when (currentRoute){
+                "List", "Achievements", "Control",null -> TitleBanner()
+                else -> {
+                    Row(modifier = Modifier.background(Color(0xFF9C27B0)).fillMaxWidth().padding(0.dp,20.dp,0.dp,0.dp)) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "", tint = Color.White,
+                            modifier=Modifier.clickable(){navController.popBackStack(route = "List", inclusive = false)}
+                                .size(40.dp))
+                        Text("LECTURE", color = Color.White,
+                            modifier = Modifier.padding(100.dp,
+                                0.dp,0.dp,0.dp), fontSize = 40.sp)
+                    }
+                }
+            }
         },
         bottomBar = {
+            if(showBottomBar)
             NavigationBar(listOf(
                 NavigationItem(Icons.Outlined.Home, "Accueil", { navController.popBackStack(route = "List", inclusive = false) }),
                 NavigationItem(Icons.Outlined.Check, "Succès", { navController.navigate("Achievements") { popUpTo("List") } }),
@@ -64,7 +89,7 @@ fun Netfloux(viewModel: StoryViewModel) {
         padding ->
         // La taille de la topbar qui ne prend pas d'espace concret
         Column (modifier = Modifier.padding(padding)) {
-            TitleBanner()
+
             NavHost(navController = navController, startDestination = "List") {
                 composable("List") {
                     StoryBloomList(storyState) {
@@ -88,7 +113,7 @@ fun Netfloux(viewModel: StoryViewModel) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StoryBloomList(state: StoryState, onClickDetails: (story: Story) -> Unit) {
+fun StoryBloomList(storyState: StoryState, onClickDetails: (story: Story) -> Unit) {
     var searchTxt by remember { mutableStateOf("") }
     var list = remember { mutableStateListOf<String>() }
     Column(modifier = Modifier
@@ -119,13 +144,13 @@ fun StoryBloomList(state: StoryState, onClickDetails: (story: Story) -> Unit) {
             Icon(Icons.Filled.PlayArrow,"",tint = Color(0xFF4CAF50))
             Text("Continuer la lecture")
         }
-        if (state.isLoading) {
+        if (storyState.isLoading) {
             Box(modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
         } else {
-            val stories = state.stories
+            val stories = storyState.stories
             val titleFiltered = stories.filter {
                 it.title.contains(searchTxt, ignoreCase = true)
             }

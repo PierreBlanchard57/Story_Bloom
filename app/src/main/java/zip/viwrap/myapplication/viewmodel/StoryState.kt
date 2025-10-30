@@ -7,5 +7,4 @@ data class StoryState(
     val selectedStory: Story? = null,
     val isLoading: Boolean = false,
     val error: Exception? = null,
-    var selectedTags:MutableList<String> = mutableListOf()
 )
