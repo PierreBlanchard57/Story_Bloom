@@ -2,6 +2,7 @@ package zip.viwrap.myapplication.userpersist
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
+import zip.viwrap.myapplication.Preference
 
 @Dao
 interface BookProgressDao {
@@ -35,4 +36,10 @@ interface BookProgressDao {
 
     @Query("SELECT SUM(pages_read) FROM bookProgressDetail")
     fun getLevel(): Flow<Int>
+
+    @Query("SELECT * from preferenceDetail")
+    fun getPreferences(): Flow<List<PreferenceDetail>>
+
+    @Insert
+    fun insert(prefDetail: PreferenceDetail)
 }

@@ -28,6 +28,8 @@ import androidx.compose.material3.SliderState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,6 +41,8 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.serialization.Serializable
+import zip.viwrap.myapplication.userpersist.PreferenceStrings
 
 val bgColor = Color(0xFFAC52DC)
 val insetColor = Color(0xFF733296)
@@ -104,10 +108,28 @@ fun LockedSliderEditor(name: String, desc: String) {
     }
 }
 
+@Serializable
+sealed class Preference
+
+@Serializable
+data class BoolPreference(
+    val value: Boolean
+) : Preference()
+
+@Serializable
+data class RangePreference(
+    val value: Double,
+    val lowerBound: Double = 0.0,
+    val upperBound: Double = 1.0,
+    val step: Double = 0.0,
+) : Preference()
+
 // Presque équivalent à un "inspecteur" de données.
 // TODO: value va sans doute devenir un chemin vers une donnée
 @Composable
-fun PreferenceEditor(painter: Painter, name: String, desc: String, value: Any) {
+fun PreferenceEditor(key: String, pref: Preference) {
+    val meta = PreferenceStrings.strings[key]
+    val painter = rememberVectorPainter(meta?.icon ?: Icons.Filled.Warning)
     Box(modifier = Modifier
         .clip(RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp))
         .background(color = bgColor)
@@ -123,25 +145,23 @@ fun PreferenceEditor(painter: Painter, name: String, desc: String, value: Any) {
                 Column (
                     modifier = Modifier.fillMaxHeight().weight(1f).padding(10.dp, 0.dp),
                     verticalArrangement = Arrangement.Center) {
-                    Text(name, color = Color(0xFFFFFFFF), fontFamily = TitleFont.Family)
-                    Text(desc, color = Color(0xFFD8B1E1), fontSize = 15.sp, lineHeight = 12.sp)
-//                    LinearProgressIndicator(
-//                        progress = { 0.3f },
-//                        gapSize = 0.dp,
-//                        drawStopIndicator = {},
-//                        strokeCap = StrokeCap.Square,
-//                        color = Color(0xFFFF9E30),
-//                        trackColor = Color(0x80FFFFFF),
-//                        modifier = Modifier.fillMaxWidth().height(10.dp)
-//                    )
+                    Text(meta?.name ?: "NOM", color = Color(0xFFFFFFFF), fontFamily = TitleFont.Family)
+                    Text(meta?.desc ?: "Description", color = Color(0xFFD8B1E1), fontSize = 15.sp, lineHeight = 12.sp)
+                    if (pref is RangePreference) {
+                        Slider(
+                            value = ((pref.value - pref.lowerBound) / (pref.upperBound - pref.lowerBound)).toFloat(),
+                            onValueChange = { TODO() },
+                            modifier = Modifier.height(30.dp)
+                        )
+                    }
                 }
                 Spacer(modifier = Modifier)
-                Switch(
-                    checked = true,
-                    onCheckedChange = {
-
-                    }
-                )
+                if (pref is BoolPreference) {
+                    Switch(
+                        checked = pref.value,
+                        onCheckedChange = { TODO() }
+                    )
+                }
             }
         }
     }

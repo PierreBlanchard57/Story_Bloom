@@ -40,6 +40,7 @@ import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.*
 import coil3.compose.AsyncImage
+import zip.viwrap.myapplication.userpersist.BookProgressViewModel
 import zip.viwrap.myapplication.viewmodel.StoryState
 import zip.viwrap.myapplication.viewmodel.StoryViewModel
 
@@ -239,16 +240,19 @@ fun StoryBloomAchievements(state: StoryState) {
 }
 
 @Composable
-fun StoryBloomControl(movieState: StoryState) {
+fun StoryBloomControl(storyState: StoryState) {
+    val settingsVM = BookProgressViewModel.getViewModel()
+    println(settingsVM.preferences)
+    val prefs by settingsVM.preferences.collectAsState()
     LazyColumn (modifier = Modifier.fillMaxWidth().padding(10.dp), verticalArrangement =
         Arrangement.spacedBy(10.dp)) {
         item { AchievementTile(null, painterResource(R.drawable.book), "15min de temps de lecture aujourd'hui.") }
         item { WarningBar("15 mins restantes.") }
         item { Text("Paramètres de contrôle") }
         item { LockedSliderEditor("Limite quotidienne", "Temps max de lecture par jour") }
-        item { PreferenceEditor(rememberVectorPainter(Icons.Filled.Notifications), "Notifications", "Alerte de limite de temps", 1) }
-        item { PreferenceEditor(rememberVectorPainter(Icons.Filled.Refresh), "Lecture automatique", "Passer automatiquement à la page suivante.", 1) }
-        item { PreferenceEditor(rememberVectorPainter(Icons.Filled.Warning), "Filtre d'age", "Afficher uniquement histoires adaptées.", 1) }
+        items(prefs) {
+            PreferenceEditor(it.key, it.data)
+        }
     }
 }
 

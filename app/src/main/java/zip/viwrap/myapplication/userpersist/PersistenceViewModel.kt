@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.*
+import zip.viwrap.myapplication.Preference
 
 class BookProgressViewModel(private val bookProgressDao: BookProgressDao) : ViewModel() {
     private val _bookDetails = MutableStateFlow<List<BookProgressDetail?>>(arrayListOf())
@@ -29,6 +30,12 @@ class BookProgressViewModel(private val bookProgressDao: BookProgressDao) : View
             initialValue = 0
         )
     }
+
+    val preferences: StateFlow<List<PreferenceDetail>> = bookProgressDao.getPreferences().stateIn(
+        viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = listOf()
+    )
 
     companion object {
         private lateinit var instance: BookProgressViewModel
