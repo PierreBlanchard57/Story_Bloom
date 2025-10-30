@@ -9,10 +9,20 @@ interface BookProgressDao {
     suspend fun insert(progressDetail: BookProgressDetail)
 
     @Delete
-    suspend fun update(progressDetail: BookProgressDetail)
+    suspend fun delete(progressDetail: BookProgressDetail)
 
     @Query("SELECT * FROM bookProgressDetail WHERE id = :id")
     suspend fun getBookProgressDetail(id: Int): BookProgressDetail?
+
+    @Upsert
+    suspend fun upsertBookProgressDetail(progressDetail: BookProgressDetail)
+
+    // A appeler quand on feuillette un livre, met à jour le niveau aussi.
+    suspend fun updateBookPage(id: Int, page: Int) {
+        val read = getBookProgressDetail(id)?.pagesRead
+        if (read == null || read < page)
+            upsertBookProgressDetail(BookProgressDetail(id, page))
+    }
 
     @Query("DELETE FROM bookProgressDetail WHERE id = :id")
     suspend fun deleteBookProgressDetail(id: Int)
