@@ -30,6 +30,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,6 +45,8 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.serialization.Serializable
+import zip.viwrap.myapplication.userpersist.BookProgressViewModel
+import zip.viwrap.myapplication.userpersist.PreferenceDetail
 import zip.viwrap.myapplication.userpersist.PreferenceStrings
 
 val bgColor = Color(0xFFAC52DC)
@@ -118,7 +123,7 @@ data class BoolPreference(
 
 @Serializable
 data class RangePreference(
-    val value: Double,
+    var value: Double,
     val lowerBound: Double = 0.0,
     val upperBound: Double = 1.0,
     val step: Double = 0.0,
@@ -148,9 +153,18 @@ fun PreferenceEditor(key: String, pref: Preference) {
                     Text(meta?.name ?: "NOM", color = Color(0xFFFFFFFF), fontFamily = TitleFont.Family)
                     Text(meta?.desc ?: "Description", color = Color(0xFFD8B1E1), fontSize = 15.sp, lineHeight = 12.sp)
                     if (pref is RangePreference) {
+                        var sliderPosition by remember { mutableFloatStateOf(pref.value.toFloat()) }
                         Slider(
-                            value = ((pref.value - pref.lowerBound) / (pref.upperBound - pref.lowerBound)).toFloat(),
-                            onValueChange = { TODO() },
+                            value = sliderPosition,
+                            onValueChange = {
+                                sliderPosition = it
+                            },
+                            onValueChangeFinished = {
+                                val pvm = BookProgressViewModel.getViewModel()
+                                pref.value = sliderPosition.toDouble()
+                                pvm.updatePreference(PreferenceDetail(key, pref))
+                            },
+                            valueRange = pref.lowerBound.toFloat()..pref.upperBound.toFloat(),
                             modifier = Modifier.height(30.dp)
                         )
                     }

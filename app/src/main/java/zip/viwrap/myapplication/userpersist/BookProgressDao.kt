@@ -42,4 +42,7 @@ interface BookProgressDao {
 
     @Insert
     fun insert(prefDetail: PreferenceDetail)
+
+    @Update
+    fun update(prefDetail: PreferenceDetail)
 }
