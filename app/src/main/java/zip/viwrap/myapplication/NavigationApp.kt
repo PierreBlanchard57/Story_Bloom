@@ -14,10 +14,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.rounded.AccountCircle
+import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -35,11 +36,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModelStoreOwner
-import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.*
 import coil3.compose.AsyncImage
+import org.intellij.lang.annotations.JdkConstants
 import zip.viwrap.myapplication.userpersist.BookProgressViewModel
 import zip.viwrap.myapplication.viewmodel.StoryState
 import zip.viwrap.myapplication.viewmodel.StoryViewModel
@@ -141,10 +141,7 @@ fun StoryBloomList(storyState: StoryState, onClickDetails: (story: Story) -> Uni
             ClickableTag("Educatif",false, list)
             ClickableTag("Magie",false, list)
         }
-        Row{
-            Icon(Icons.Filled.PlayArrow,"",tint = Color(0xFF4CAF50))
-            Text("Continuer la lecture")
-        }
+
         if (storyState.isLoading) {
             Box(modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center) {
@@ -166,8 +163,12 @@ fun StoryBloomList(storyState: StoryState, onClickDetails: (story: Story) -> Uni
                     ok
                 }
             }
+            Row{
+                Icon(Icons.Filled.PlayArrow,"",tint = Color(0xFF4CAF50))
+                Text("Continuer la lecture")
+            }
             val story=Story("test",5,"auteur","https://picsum.photos/200/300?grayscale",85,
-                "non",6,2,8,listOf())
+                "non",6,2,8,listOf("test","test2"))
             StoryCard(story,onClickDetails)
             LazyRow {
 
@@ -258,22 +259,40 @@ fun StoryBloomControl(storyState: StoryState) {
 
 @Composable
 fun StoryBloomDetails(storyState: StoryState) {
-    val movie = storyState.selectedStory
-    if (movie != null) {
+    val story = storyState.selectedStory
+    if (story != null) {
         Column (modifier = Modifier.fillMaxSize().padding(20.dp)) {
-            Text(movie.title, fontSize = 20.sp)
+
             AsyncImage(
-                model = movie.coverImage,
+                model = story.coverImage,
                 contentDescription = "Movie poster",
                 Modifier.fillMaxWidth(),
                 contentScale = ContentScale.Fit
             )
-            Text(movie.synopsis, textAlign = TextAlign.Justify, modifier = Modifier.padding(8.dp))
-            Box(modifier = Modifier
-                .background(Color.Gray)
-                .requiredHeight(1.dp)
-                .fillMaxWidth())
-            Text(movie.author, modifier = Modifier.padding(8.dp))
+            Text(story.title, fontSize = 20.sp)
+            Row (horizontalArrangement = Arrangement.spacedBy(5.dp)){
+                story.tags.forEach {
+                    NormalTag(it)
+                }
+            }
+            Text(story.synopsis, textAlign = TextAlign.Justify, modifier = Modifier.padding(8.dp))
+            ReadButton()
+            Row{
+                Icon(Icons.Rounded.Info,"")
+                Text("${story.duration} min",color = Color.Gray, modifier = Modifier.padding(0.dp,0.dp,10.dp,0.dp))
+                Icon(Icons.Rounded.AccountCircle,"")
+                Text("${story.minAge}-${story.maxAge} ans",color = Color.Gray)
+            }
+            LinearProgressIndicator(
+                progress = { 0.3f },
+                color = Color(0xFF9C27B0),
+                gapSize = 0.dp,
+                strokeCap = StrokeCap.Butt,
+                modifier = Modifier.padding(10.dp,10.dp,10.dp,10.dp).height(10.dp),
+                drawStopIndicator = {}
+            )
+
+            Text("30 %", fontSize = 20.sp)
         }
     } else {
         Text("Aucun film à afficher.")
