@@ -141,10 +141,7 @@ fun StoryBloomList(storyState: StoryState, onClickDetails: (story: Story) -> Uni
             ClickableTag("Educatif",false, list)
             ClickableTag("Magie",false, list)
         }
-        Row{
-            Icon(Icons.Filled.PlayArrow,"",tint = Color(0xFF4CAF50))
-            Text("Continuer la lecture")
-        }
+
         if (storyState.isLoading) {
             Box(modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center) {
@@ -165,6 +162,10 @@ fun StoryBloomList(storyState: StoryState, onClickDetails: (story: Story) -> Uni
                     }
                     ok
                 }
+            }
+            Row{
+                Icon(Icons.Filled.PlayArrow,"",tint = Color(0xFF4CAF50))
+                Text("Continuer la lecture")
             }
             val story=Story("test",5,"auteur","https://picsum.photos/200/300?grayscale",85,
                 "non",6,2,8,listOf("test","test2"))
@@ -275,7 +276,7 @@ fun StoryBloomDetails(storyState: StoryState) {
                 }
             }
             Text(story.synopsis, textAlign = TextAlign.Justify, modifier = Modifier.padding(8.dp))
-            //bouton à venir
+            ReadButton()
             Row{
                 Icon(Icons.Rounded.Info,"")
                 Text("${story.duration} min",color = Color.Gray, modifier = Modifier.padding(0.dp,0.dp,10.dp,0.dp))

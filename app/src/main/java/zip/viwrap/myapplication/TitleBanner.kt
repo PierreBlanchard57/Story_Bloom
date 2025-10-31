@@ -37,9 +37,9 @@ fun TitleBanner() {
 
     Box(
         modifier = Modifier
-            .clip(RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp)) // ← D'abord on arrondit
+            .clip(RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp))
             .background(Brush.linearGradient(colorStops = colorStops,
-                start = Offset(0f,0f), end = Offset(200f,450f))) // ← Ensuite on applique le fond
+                start = Offset(0f,0f), end = Offset(200f,450f)))
             .padding(horizontal = 10.dp, vertical = 10.dp)
     ) {
         Row {
