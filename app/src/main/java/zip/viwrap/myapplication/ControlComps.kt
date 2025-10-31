@@ -31,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -171,9 +172,14 @@ fun PreferenceEditor(key: String, pref: Preference) {
                 }
                 Spacer(modifier = Modifier)
                 if (pref is BoolPreference) {
+                    var checkedState by remember { mutableStateOf(pref.value) }
                     Switch(
-                        checked = pref.value,
-                        onCheckedChange = { TODO() }
+                        checked = checkedState,
+                        onCheckedChange = {
+                            checkedState = it
+                            val pvm = BookProgressViewModel.getViewModel()
+                            pvm.updatePreference(PreferenceDetail(key, BoolPreference(checkedState)))
+                        }
                     )
                 }
             }
