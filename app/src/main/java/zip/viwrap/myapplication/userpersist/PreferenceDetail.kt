@@ -2,6 +2,7 @@ package zip.viwrap.myapplication.userpersist
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -16,6 +17,8 @@ data class PreferenceNameDescIcon (
 
 object PreferenceStrings {
     val strings = mapOf(
+        "daily_limit" to PreferenceNameDescIcon(Icons.Outlined.Lock,
+            "Limite Quotidienne", "Temps max de lecture par jour"),
         "notifications" to PreferenceNameDescIcon(Icons.Filled.Notifications,
             "Notifications", "Alerte de limite de temps"),
         "auto_read" to PreferenceNameDescIcon(Icons.Filled.Refresh,

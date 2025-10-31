@@ -20,7 +20,7 @@ class PreferenceTypeConverter {
 }
 
 @TypeConverters(PreferenceTypeConverter::class, DateConverter::class)
-@Database(version = 6, entities = [BookProgressDetail::class, PreferenceDetail::class, TimespanDetail::class], exportSchema = false)
+@Database(version = 8, entities = [BookProgressDetail::class, PreferenceDetail::class, TimespanDetail::class], exportSchema = false)
 abstract class UserPersistenceDatabase : RoomDatabase() {
     abstract fun getBookProgressDao(): BookProgressDao
 }
@@ -44,9 +44,10 @@ object UserPersistenceProvider {
                             // données par défaut
                             Executors.newSingleThreadExecutor().execute {
                                 val prefsDao = instance!!.getBookProgressDao()
+                                prefsDao.insert(PreferenceDetail("daily_limit", RangePreference(30.0, 15.0, 120.0, 5.0, "min")))
+                                prefsDao.insert(PreferenceDetail("age_filter", RangePreference(5.0, 1.0, 18.0, 1.0, "ans")))
                                 prefsDao.insert(PreferenceDetail("notifications", BoolPreference(true)))
                                 prefsDao.insert(PreferenceDetail("auto_read", BoolPreference(false)))
-                                prefsDao.insert(PreferenceDetail("age_filter", RangePreference(5.0, 1.0, 18.0, 1.0)))
                             }
                         }
                     }

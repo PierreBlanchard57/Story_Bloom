@@ -256,9 +256,11 @@ fun StoryBloomControl(storyState: StoryState) {
         }
         item { WarningBar("15 mins restantes.") }
         item { Text("Paramètres de contrôle") }
-        item { LockedSliderEditor("Limite quotidienne", "Temps max de lecture par jour") }
         items(prefs) {
-            PreferenceEditor(it.key, it.data)
+            if (it.data is RangePreference)
+                LockedSliderEditor(it.key, it.data)
+            else
+                PreferenceEditor(it.key, it.data)
         }
     }
 }
