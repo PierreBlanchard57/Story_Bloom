@@ -1,5 +1,6 @@
 package zip.viwrap.myapplication
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -80,21 +81,21 @@ fun StoryBloom() {
         },
         bottomBar = {
             if(showBottomBar)
-            NavigationBar(listOf(
-                NavigationItem(Icons.Outlined.Home, "Accueil", { navController.popBackStack(route = "List", inclusive = false) }),
-                NavigationItem(Icons.Outlined.Check, "Succès", { navController.navigate("Achievements") { popUpTo("List") } }),
-                NavigationItem(Icons.Outlined.Lock, "Contrôle", { navController.navigate("Control") { popUpTo("List") } })
-            ))
+                NavigationBar(listOf(
+                    NavigationItem(Icons.Outlined.Home, "Accueil", { navController.popBackStack(route = "List", inclusive = false) }),
+                    NavigationItem(Icons.Outlined.Check, "Succès", { navController.navigate("Achievements") { popUpTo("List") } }),
+                    NavigationItem(Icons.Outlined.Lock, "Contrôle", { navController.navigate("Control") { popUpTo("List") } })
+                ))
         }
     ) {
-        padding ->
+            padding ->
         // La taille de la topbar qui ne prend pas d'espace concret
         Column (modifier = Modifier.padding(padding)) {
 
             NavHost(navController = navController, startDestination = "List") {
                 composable("List") {
                     StoryBloomList(storyState) {
-                        story -> viewModel.setSelectedStory(story)
+                            story -> viewModel.setSelectedStory(story)
                         navController.navigate("Details")
                     }
                 }
@@ -153,7 +154,7 @@ fun StoryBloomList(storyState: StoryState, onClickDetails: (story: Story) -> Uni
                 it.title.contains(searchTxt, ignoreCase = true)
             }
             val tagFiltered=titleFiltered.filter {
-                story->
+                    story->
                 if(list.isEmpty())true
                 else{
                     var ok=true
@@ -167,8 +168,8 @@ fun StoryBloomList(storyState: StoryState, onClickDetails: (story: Story) -> Uni
                 Icon(Icons.Filled.PlayArrow,"",tint = Color(0xFF4CAF50))
                 Text("Continuer la lecture")
             }
-            val story=Story("test",5,"auteur","https://picsum.photos/200/300?grayscale",85,
-                "non",6,2,8,listOf("test","test2"))
+            val story=Story("La vie en 1950",5,"auteur","https://picsum.photos/200/300?grayscale",85,
+                "Imaginez vivre en 1950,la vie était en noir et blanc!",6,2,8,listOf("test","blague"))
             StoryCard(story,onClickDetails)
             LazyRow {
 
@@ -243,15 +244,11 @@ fun StoryBloomAchievements(state: StoryState) {
 @Composable
 fun StoryBloomControl(storyState: StoryState) {
     val settingsVM = BookProgressViewModel.getViewModel()
+    println(settingsVM.preferences)
     val prefs by settingsVM.preferences.collectAsState()
     LazyColumn (modifier = Modifier.fillMaxWidth().padding(10.dp), verticalArrangement =
         Arrangement.spacedBy(10.dp)) {
-        item {
-            val pvm = BookProgressViewModel.getViewModel()
-            val seconds by pvm.getSecondsSpent().collectAsState()
-            val minStr = (seconds / 60).toString()
-            AchievementTile(null, painterResource(R.drawable.book), minStr + "min de temps de lecture aujourd'hui.")
-        }
+        item { AchievementTile(null, painterResource(R.drawable.book), "15min de temps de lecture aujourd'hui.") }
         item { WarningBar("15 mins restantes.") }
         item { Text("Paramètres de contrôle") }
         item { LockedSliderEditor("Limite quotidienne", "Temps max de lecture par jour") }
@@ -263,14 +260,21 @@ fun StoryBloomControl(storyState: StoryState) {
 
 @Composable
 fun StoryBloomDetails(storyState: StoryState) {
-    val story = storyState.selectedStory
+    val story:Story = requireNotNull(storyState.selectedStory)
+
+    val scrollState = rememberScrollState()
+
+    val dbvm = BookProgressViewModel.getViewModel()
+    val pagesRead by dbvm.getPagesRead(story.id).collectAsState()
+    val progress = if (story.pages > 0) pagesRead.toFloat() / story.pages else 0f
+
     if (story != null) {
-        Column (modifier = Modifier.fillMaxSize().padding(20.dp)) {
+        Column (modifier = Modifier.fillMaxSize().padding(20.dp).verticalScroll(scrollState), horizontalAlignment = Alignment.CenterHorizontally) {
 
             AsyncImage(
                 model = story.coverImage,
                 contentDescription = "Movie poster",
-                Modifier.fillMaxWidth(),
+                Modifier.fillMaxWidth().height(300.dp),
                 contentScale = ContentScale.Fit
             )
             Text(story.title, fontSize = 20.sp)
@@ -288,7 +292,7 @@ fun StoryBloomDetails(storyState: StoryState) {
                 Text("${story.minAge}-${story.maxAge} ans",color = Color.Gray)
             }
             LinearProgressIndicator(
-                progress = { 0.3f },
+                progress = { progress },
                 color = Color(0xFF9C27B0),
                 gapSize = 0.dp,
                 strokeCap = StrokeCap.Butt,
@@ -296,7 +300,7 @@ fun StoryBloomDetails(storyState: StoryState) {
                 drawStopIndicator = {}
             )
 
-            Text("30 %", fontSize = 20.sp)
+            Text("${(progress*100).toInt()} %", fontSize = 20.sp)
         }
     } else {
         Text("Aucun film à afficher.")
