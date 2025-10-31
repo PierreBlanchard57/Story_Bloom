@@ -21,6 +21,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,10 +41,12 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.*
 import coil3.compose.AsyncImage
+import io.ktor.util.valuesOf
 import org.intellij.lang.annotations.JdkConstants
 import zip.viwrap.myapplication.userpersist.BookProgressViewModel
 import zip.viwrap.myapplication.viewmodel.StoryState
 import zip.viwrap.myapplication.viewmodel.StoryViewModel
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -244,17 +247,19 @@ fun StoryBloomAchievements(state: StoryState) {
 @Composable
 fun StoryBloomControl(storyState: StoryState) {
     val settingsVM = BookProgressViewModel.getViewModel()
-    println(settingsVM.preferences)
     val prefs by settingsVM.preferences.collectAsState()
+    val seconds by settingsVM.getSecondsSpent().collectAsState()
+    val mins = (seconds / 60)
     LazyColumn (modifier = Modifier.fillMaxWidth().padding(10.dp), verticalArrangement =
         Arrangement.spacedBy(10.dp)) {
         item {
-            val pvm = BookProgressViewModel.getViewModel()
-            val seconds by pvm.getSecondsSpent().collectAsState()
-            val minStr = (seconds / 60).toString()
-            AchievementTile(null, painterResource(R.drawable.book), minStr + "min de temps de lecture aujourd'hui.")
+            AchievementTile(null, painterResource(R.drawable.book), mins.toString() + "min de temps de lecture aujourd'hui.")
         }
-        item { WarningBar("15 mins restantes.") }
+        item {
+            val minutesState by settingsVM.getTimeLimit().collectAsState()
+            val minsLimit = (minutesState as RangePreference).value.roundToInt()
+            WarningBar((minsLimit - mins).toString() + " mins restantes.")
+        }
         item { Text("Paramètres de contrôle") }
         items(prefs) {
             if (it.data is RangePreference)
