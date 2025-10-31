@@ -19,8 +19,8 @@ class PreferenceTypeConverter {
     fun toPreference(json: String): Preference = Json.decodeFromString<Preference>(json)
 }
 
-@TypeConverters(PreferenceTypeConverter::class)
-@Database(version = 5, entities = [BookProgressDetail::class, PreferenceDetail::class], exportSchema = false)
+@TypeConverters(PreferenceTypeConverter::class, DateConverter::class)
+@Database(version = 6, entities = [BookProgressDetail::class, PreferenceDetail::class, TimespanDetail::class], exportSchema = false)
 abstract class UserPersistenceDatabase : RoomDatabase() {
     abstract fun getBookProgressDao(): BookProgressDao
 }

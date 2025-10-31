@@ -243,11 +243,15 @@ fun StoryBloomAchievements(state: StoryState) {
 @Composable
 fun StoryBloomControl(storyState: StoryState) {
     val settingsVM = BookProgressViewModel.getViewModel()
-    println(settingsVM.preferences)
     val prefs by settingsVM.preferences.collectAsState()
     LazyColumn (modifier = Modifier.fillMaxWidth().padding(10.dp), verticalArrangement =
         Arrangement.spacedBy(10.dp)) {
-        item { AchievementTile(null, painterResource(R.drawable.book), "15min de temps de lecture aujourd'hui.") }
+        item {
+            val pvm = BookProgressViewModel.getViewModel()
+            val seconds by pvm.getSecondsSpent().collectAsState()
+            val minStr = (seconds / 60).toString()
+            AchievementTile(null, painterResource(R.drawable.book), minStr + "min de temps de lecture aujourd'hui.")
+        }
         item { WarningBar("15 mins restantes.") }
         item { Text("Paramètres de contrôle") }
         item { LockedSliderEditor("Limite quotidienne", "Temps max de lecture par jour") }
