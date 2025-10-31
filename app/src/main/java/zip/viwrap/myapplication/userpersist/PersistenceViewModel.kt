@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.*
 import zip.viwrap.myapplication.Preference
+import zip.viwrap.myapplication.RangePreference
 import java.util.concurrent.Executors
 
 class BookProgressViewModel(private val bookProgressDao: BookProgressDao) : ViewModel() {
@@ -37,6 +38,22 @@ class BookProgressViewModel(private val bookProgressDao: BookProgressDao) : View
             viewModelScope,
             started = SharingStarted.Lazily,
             initialValue = 0
+        )
+    }
+
+    fun getAgeLimit(): StateFlow<Preference?> {
+        return bookProgressDao.getPreference("age_filter").stateIn(
+            viewModelScope,
+            started = SharingStarted.Lazily,
+            initialValue = RangePreference(0.0)
+        )
+    }
+
+    fun getTimeLimit(): StateFlow<Preference?> {
+        return bookProgressDao.getPreference("daily_limit").stateIn(
+            viewModelScope,
+            started = SharingStarted.Lazily,
+            initialValue = RangePreference(0.0)
         )
     }
 

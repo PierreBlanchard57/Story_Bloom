@@ -46,6 +46,9 @@ interface BookProgressDao {
     @Update
     fun update(prefDetail: PreferenceDetail)
 
+    @Query("SELECT data FROM preferenceDetail WHERE pref_key = :key")
+    fun getPreference(key: String): Flow<Preference?>
+
     @Query("INSERT INTO timespanDetail(start, stop) VALUES(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)")
     fun startTimespan()
 
