@@ -15,6 +15,9 @@ interface BookProgressDao {
     @Query("SELECT * FROM bookProgressDetail WHERE id = :id")
     suspend fun getBookProgressDetail(id: Int): BookProgressDetail?
 
+    @Query("SELECT COUNT(*) FROM bookProgressDetail")
+    fun getBooksStarted(): Flow<Int>
+
     @Query("SELECT pages_read FROM bookProgressDetail WHERE id = :id")
     fun getPagesRead(id: Int): Flow<Int>
 

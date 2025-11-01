@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
@@ -30,6 +32,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -90,7 +93,10 @@ fun AchievementTile(width: Dp?, painter: Painter, statistic: String) {
 
 // Tuile de badge (donc juste une image et un texte)
 @Composable
-fun BadgeTile(width: Dp, painter: Painter, title: String) {
+fun BadgeTile(width: Dp, _painter: Painter, _title: String, unlockPredicate: Boolean) {
+    val painter = if (unlockPredicate) _painter else rememberVectorPainter(Icons.Default.Lock)
+    val title = if (unlockPredicate) _title else "Verrouillé"
+
     Box(modifier = Modifier
         .clip(RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp))
         .width(width)

@@ -33,6 +33,12 @@ class BookProgressViewModel(private val bookProgressDao: BookProgressDao) : View
         )
     }
 
+    val booksStarted: StateFlow<Int> = bookProgressDao.getBooksStarted().stateIn(
+        viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = 0
+    )
+
     fun getSecondsSpent(): StateFlow<Int> {
         return bookProgressDao.getTimespanSecondsToday().stateIn(
             viewModelScope,

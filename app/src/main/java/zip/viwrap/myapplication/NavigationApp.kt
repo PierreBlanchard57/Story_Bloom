@@ -199,6 +199,14 @@ fun StoryBloomList(storyState: StoryState, onClickDetails: (story: Story) -> Uni
 
 @Composable
 fun StoryBloomAchievements(state: StoryState) {
+    var pvm = BookProgressViewModel.getViewModel()
+
+    val booksStarted by pvm.booksStarted.collectAsState()
+
+    val level by pvm.levelState.collectAsState()
+    val progress = (calculateLevelProgress(level) * 100).toInt()
+    val nextLevel = getLevelBucket(level) + 1
+
     LazyColumn (modifier = Modifier.fillMaxWidth().padding(10.dp), verticalArrangement =
         Arrangement.spacedBy(10.dp)) {
         item { Text("Succès") }
@@ -213,10 +221,18 @@ fun StoryBloomAchievements(state: StoryState) {
                 val screenWidth = LocalConfiguration.current.screenWidthDp.dp
                 val totalSpacing = spacing * (columns - 1)
                 val w = (screenWidth - totalSpacing - 20.dp /*padding*/) / columns
+
+                // Compte des livres lus
+                AchievementTile(w, painterResource(R.drawable.book), "$booksStarted livres commencés.")
+
+                // Compte total de pages lues
+                val pagesRead by pvm.levelState.collectAsState()
+                AchievementTile(w, painterResource(R.drawable.book), "$pagesRead pages lues au total.")
+
+                // Progression précise
+                AchievementTile(w, painterResource(R.drawable.book), "$progress% avant niveau $nextLevel.")
+
                 AchievementTile(w, painterResource(R.drawable.book), "99% de trucs.")
-                AchievementTile(w, painterResource(R.drawable.book), "45 tomes de Vilieu lus.")
-                AchievementTile(w, painterResource(R.drawable.book), "5 livres terminés.")
-                AchievementTile(w, painterResource(R.drawable.book), "64% avant niveau 2.")
                 AchievementTile(w, painterResource(R.drawable.book), "1 livre restant.")
             }
         }
@@ -231,10 +247,11 @@ fun StoryBloomAchievements(state: StoryState) {
             ) {
                 val screenWidth = LocalConfiguration.current.screenWidthDp.dp
                 val totalSpacing = spacing * (columns - 1)
-                val w = (screenWidth - totalSpacing - 20.dp /* padding */) / columns
-                BadgeTile(w, rememberVectorPainter(Icons.Default.Star), "Premiers pas")
-                BadgeTile(w, rememberVectorPainter(Icons.Default.Face), "Dévoreur de livres")
-                BadgeTile(w, rememberVectorPainter(Icons.Default.Lock), "Verrouillé")
+                val w = ((screenWidth - totalSpacing - 20.dp /* padding */) / columns) - 1.dp
+                BadgeTile(w, rememberVectorPainter(Icons.Default.Star), "Premiers pas", booksStarted >= 1)
+                BadgeTile(w, rememberVectorPainter(Icons.Default.Face), "Dévoreur de livres", booksStarted >= 5)
+                BadgeTile(w, rememberVectorPainter(Icons.Default.FavoriteBorder), "Novice", nextLevel >= 4)
+                BadgeTile(w, rememberVectorPainter(Icons.Default.Favorite), "Lecteur", nextLevel >= 9)
             }
         }
         item { Text("En cours") }

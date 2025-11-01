@@ -38,14 +38,26 @@ private fun getLowerBound(level: Int): Int {
     return (factor * ((level-1).toDouble().pow(exponent).toInt())) + base
 }
 
+public fun getLevelBucket(level: Int): Int {
+    var range = 0
+    while (getUpperBound(range) <= level)
+        ++range
+    return range
+}
+
+public fun calculateLevelProgress(level: Int): Float {
+    val range = getLevelBucket(level)
+    val lowerBound = getLowerBound(range)
+    val upperBound = getUpperBound(range)
+    return (level - lowerBound).toFloat() / (upperBound - lowerBound)
+}
+
 @Composable
 fun LevelBar(){
     val pesistence = BookProgressViewModel.getViewModel()
     val level by pesistence.levelState.collectAsState()
-    var range = 0
-    while (getUpperBound(range) <= level)
-        ++range
 
+    val range = getLevelBucket(level)
     val lowerBound = getLowerBound(range)
     val upperBound = getUpperBound(range)
     val progress = (level - lowerBound).toFloat() / (upperBound - lowerBound)
