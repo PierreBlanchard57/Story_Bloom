@@ -55,10 +55,5 @@ class StoryViewModel: ViewModel() {
             selectedStory =story
         )
     }
-    fun setCurrentPage(page:Int){
-        storyState=storyState.copy(
-            currentPage = page
-        )
-    }
 }
 
