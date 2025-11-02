@@ -1,7 +1,9 @@
 package zip.viwrap.myapplication
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +22,11 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,6 +40,10 @@ import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import zip.viwrap.myapplication.userpersist.BookProgressViewModel
+import zip.viwrap.myapplication.viewmodel.StoryState
+import zip.viwrap.myapplication.viewmodel.StoryViewModel
 
 @Composable
 fun ReadButton(story:Story,onPlay:(Story)->Unit){
@@ -55,10 +66,21 @@ colors = ButtonColors(Color.Transparent, Color.Transparent,Color.Gray,Color.Gray
     }
 
 }
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun PageButtons(){
+fun PageButtons(story: Story,page:Int,onPrec:()->Unit,onNext:()->Unit){
     Row(horizontalArrangement = Arrangement.Center){
-        Icon(Icons.AutoMirrored.Filled.ArrowBack,"Page précédente")
-        Icon(Icons.AutoMirrored.Filled.ArrowForward,"Page suivante")
+
+        Icon(Icons.AutoMirrored.Filled.ArrowBack,"Page précédente", modifier = Modifier
+            .size(60.dp)
+            .clickable(){onPrec()
+        })
+        Icon(Icons.AutoMirrored.Filled.ArrowForward,"Page suivante",modifier = Modifier
+            .size(60.dp)
+            .clickable(){
+            onNext()
+        })
+
+        Text("Page "+page)
     }
 }

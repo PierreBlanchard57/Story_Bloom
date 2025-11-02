@@ -59,8 +59,8 @@ fun StoryBloom() {
     val viewModel: StoryViewModel= viewModel()
     val storyState = viewModel.storiesStateFlow.collectAsState().value
 
-
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+    var currentPage by remember { mutableStateOf(0) }
 
     Scaffold (
         topBar = {
@@ -89,7 +89,11 @@ fun StoryBloom() {
                     ))
                 }
                 "StoryReader"->{
-                    PageButtons()
+                    PageButtons(requireNotNull(storyState.selectedStory),currentPage,{
+                        if(currentPage>1)currentPage--
+                    },{
+                        if(currentPage<storyState.selectedStory.pages)currentPage++
+                    })
                 }
                 else->{
                     //si autre,on affiche pas la botombar
@@ -113,7 +117,7 @@ fun StoryBloom() {
                     story->
                         val dbvm = BookProgressViewModel.getViewModel()
                         val pagesRead =dbvm.getPagesRead(storyState.selectedStory?.id ?: 0).value
-                        viewModel.setCurrentPage(pagesRead)
+                        currentPage=pagesRead+1
                         navController.navigate("StoryReader")
                     }
                 }
@@ -124,7 +128,7 @@ fun StoryBloom() {
                     StoryBloomControl(storyState)
                 }
                 composable("StoryReader"){
-                    StoryReader(requireNotNull(storyState.selectedStory))
+                    StoryReader(requireNotNull(storyState.selectedStory),currentPage)
                 }
             }
         }
@@ -186,7 +190,7 @@ fun StoryBloomList(storyState: StoryState, onClickDetails: (story: Story) -> Uni
                 Icon(Icons.Filled.PlayArrow,"",tint = Color(0xFF4CAF50))
                 Text("Continuer la lecture")
             }
-            val story=Story("La vie en 1950",5,"auteur","https://picsum.photos/200/300?grayscale",85,
+            val story=Story("La vie en 1950",5,"auteur","https://picsum.photos/200/300?grayscale",20,
                 "Imaginez vivre en 1950,la vie était en noir et blanc!",6,2,8,listOf("test","blague"))
             StoryCard(story,onClickDetails)
             LazyRow {

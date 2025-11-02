@@ -7,8 +7,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import zip.viwrap.myapplication.viewmodel.StoryViewModel
 
 @Composable
-fun StoryReader(story: Story){
-    //val vm: StoryViewModel= viewModel()
-    //val storyState=vm.storiesStateFlow.collectAsState().value
+fun StoryReader(story: Story,page:Int){
     Text(story.title)
 }
