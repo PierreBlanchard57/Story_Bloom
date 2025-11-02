@@ -59,11 +59,8 @@ fun StoryBloom() {
     val viewModel: StoryViewModel= viewModel()
     val storyState = viewModel.storiesStateFlow.collectAsState().value
 
+
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
-    val showBottomBar = when (currentRoute) {
-        "List", "Achievements", "Control" -> true
-        else -> false
-    }
 
     Scaffold (
         topBar = {
@@ -83,12 +80,21 @@ fun StoryBloom() {
             }
         },
         bottomBar = {
-            if(showBottomBar)
-                NavigationBar(listOf(
-                    NavigationItem(Icons.Outlined.Home, "Accueil", { navController.popBackStack(route = "List", inclusive = false) }),
-                    NavigationItem(Icons.Outlined.Check, "Succès", { navController.navigate("Achievements") { popUpTo("List") } }),
-                    NavigationItem(Icons.Outlined.Lock, "Contrôle", { navController.navigate("Control") { popUpTo("List") } })
-                ))
+            when(currentRoute){
+                "List", "Achievements", "Control",null ->{
+                    NavigationBar(listOf(
+                        NavigationItem(Icons.Outlined.Home, "Accueil", { navController.popBackStack(route = "List", inclusive = false) }),
+                        NavigationItem(Icons.Outlined.Check, "Succès", { navController.navigate("Achievements") { popUpTo("List") } }),
+                        NavigationItem(Icons.Outlined.Lock, "Contrôle", { navController.navigate("Control") { popUpTo("List") } })
+                    ))
+                }
+                "StoryReader"->{
+                    PageButtons()
+                }
+                else->{
+                    //si autre,on affiche pas la botombar
+                }
+            }
         }
     ) {
             padding ->
@@ -103,13 +109,22 @@ fun StoryBloom() {
                     }
                 }
                 composable("Details") {
-                    StoryBloomDetails(storyState)
+                    StoryBloomDetails(storyState){
+                    story->
+                        val dbvm = BookProgressViewModel.getViewModel()
+                        val pagesRead =dbvm.getPagesRead(storyState.selectedStory?.id ?: 0).value
+                        viewModel.setCurrentPage(pagesRead)
+                        navController.navigate("StoryReader")
+                    }
                 }
                 composable("Achievements") {
                     StoryBloomAchievements(storyState)
                 }
                 composable("Control") {
                     StoryBloomControl(storyState)
+                }
+                composable("StoryReader"){
+                    StoryReader(requireNotNull(storyState.selectedStory))
                 }
             }
         }
@@ -288,7 +303,7 @@ fun StoryBloomControl(storyState: StoryState) {
 }
 
 @Composable
-fun StoryBloomDetails(storyState: StoryState) {
+fun StoryBloomDetails(storyState: StoryState,onPlay:(Story)->Unit) {
     val story:Story = requireNotNull(storyState.selectedStory)
 
     val scrollState = rememberScrollState()
@@ -313,7 +328,7 @@ fun StoryBloomDetails(storyState: StoryState) {
                 }
             }
             Text(story.synopsis, textAlign = TextAlign.Justify, modifier = Modifier.padding(8.dp))
-            ReadButton()
+            ReadButton(story,onPlay)
             Row{
                 Icon(Icons.Rounded.Info,"")
                 Text("${story.duration} min",color = Color.Gray, modifier = Modifier.padding(0.dp,0.dp,10.dp,0.dp))
