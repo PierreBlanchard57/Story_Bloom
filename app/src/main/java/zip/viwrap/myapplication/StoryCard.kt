@@ -1,9 +1,5 @@
 package zip.viwrap.myapplication
 
-import android.nfc.Tag
-import android.widget.ProgressBar
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,29 +14,20 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
-import kotlinx.coroutines.flow.StateFlow
 import zip.viwrap.myapplication.userpersist.BookProgressViewModel
-import zip.viwrap.myapplication.viewmodel.StoryViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun StoryCard(story: Story, onclick: (Story) -> Unit){
@@ -48,7 +35,6 @@ fun StoryCard(story: Story, onclick: (Story) -> Unit){
     val pagesRead by dbvm.getPagesRead(story.id).collectAsState()
     val progress = if (story.pages > 0) pagesRead.toFloat() / story.pages else 0f
 
-    val storyVm : StoryViewModel=viewModel()
     Column(modifier = Modifier.padding(10.dp,10.dp,10.dp,10.dp).border(1.dp,Color.Gray, shape = RoundedCornerShape(10.dp, 10.dp, 10.dp, 10.dp))
         .width(180.dp).clickable(){onclick(story)}
         ) {

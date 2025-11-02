@@ -1,17 +1,20 @@
 {
   "Stories": [
     {
-      "title": "BarbaPapa",
+      "title": "Test",
       "id": "1",
       "author": "JesaisPas",
       "coverImage": "https://picsum.photos/200/300?grayscale",
-      "pages": "30",
+      "pages": "5",
       "synopsis": "...",
       "duration": "20",
       "minAge": "60",
       "maxAge": "70",
       "tags": [
         "Aventure"
+      ],
+      "content": [
+        "Je suis la page 1!","Et moi la 2!","je suis la 3!","On y est presque!","C'est fini!"
       ]
     }
   ]

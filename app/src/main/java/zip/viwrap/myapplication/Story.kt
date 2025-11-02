@@ -18,6 +18,7 @@ data class SingleStoryDto(
     val minAge:Int,
     val maxAge:Int,
     val tags:List<String>,
+    val content:List<String>
 )
 data class Story(
     val title:String,
@@ -30,4 +31,5 @@ data class Story(
     val minAge:Int,
     val maxAge:Int,
     val tags:List<String>,
+    val content:List<String>
 )

@@ -31,6 +31,7 @@ class StoryMapper {
                 minAge = minAge,
                 maxAge = maxAge,
                 tags = tags,
+                content = content,
             )
         }
 
