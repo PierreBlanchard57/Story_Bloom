@@ -81,6 +81,7 @@ fun StoryBloom() {
     val viewModel: StoryViewModel= viewModel()
     val storyState = viewModel.storiesStateFlow.collectAsState().value
 
+    val dbvm = BookProgressViewModel.getViewModel()
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
     var currentPage by remember { mutableStateOf(0) }
 
@@ -92,7 +93,8 @@ fun StoryBloom() {
                     Row(modifier = Modifier.background(Color(0xFF9C27B0)).fillMaxWidth().padding(0.dp,20.dp,0.dp,0.dp)) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "", tint = Color.White,
-                            modifier=Modifier.clickable(){navController.popBackStack(route = "List", inclusive = false)}
+                            modifier=Modifier.clickable(){//dbvm.stopTimespan()
+                                navController.popBackStack(route = "List", inclusive = false)}
                                 .size(40.dp))
                         Text("LECTURE", color = Color.White,
                             modifier = Modifier.padding(100.dp,
@@ -114,7 +116,11 @@ fun StoryBloom() {
                     PageButtons(requireNotNull(storyState.selectedStory),currentPage,{
                         if(currentPage>1)currentPage--
                     },{
-                        if(currentPage<storyState.selectedStory.pages)currentPage++
+                        if(currentPage<storyState.selectedStory.pages) {
+                            currentPage++
+                            if(currentPage>dbvm.getPagesRead(storyState.selectedStory.id).value)
+                                dbvm.updateBookPage(storyState.selectedStory.id,currentPage)
+                        }
                     })
                 }
                 else->{
@@ -212,12 +218,6 @@ fun StoryBloomList(storyState: StoryState, onClickDetails: (story: Story) -> Uni
                 Icon(Icons.Filled.PlayArrow,"",tint = Color(0xFF4CAF50))
                 Text("Continuer la lecture")
             }
-            val story=Story("La vie en 1950",5,"auteur","https://picsum.photos/200/300?grayscale",20,
-                "Imaginez vivre en 1950,la vie était en noir et blanc!",6,2,8,listOf("test","blague"),
-                listOf("Je suis la page 1!",
-                    "Et moi la page 2!",
-                    "Moi c'est la page 3!"))
-            StoryCard(story,onClickDetails)
             LazyRow {
 
                 items(tagFiltered) {
