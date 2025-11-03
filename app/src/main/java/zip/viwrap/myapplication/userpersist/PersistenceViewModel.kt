@@ -83,6 +83,18 @@ class BookProgressViewModel(private val bookProgressDao: BookProgressDao) : View
         }
     }
 
+    fun startTimespan() {
+        viewModelScope.launch {
+            bookProgressDao.startTimespan()
+        }
+    }
+
+    fun stopTimespan() {
+        viewModelScope.launch {
+            bookProgressDao.stopTimespan()
+        }
+    }
+
     companion object {
         private lateinit var instance: BookProgressViewModel
 
