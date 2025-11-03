@@ -1,21 +1,104 @@
 {
   "Stories": [
-    {
-      "title": "Test",
+        {
+      "title": "Le Chat qui volait la lune",
       "id": "1",
-      "author": "JesaisPas",
-      "coverImage": "https://picsum.photos/200/300?grayscale",
-      "pages": "5",
-      "synopsis": "...",
-      "duration": "20",
-      "minAge": "60",
-      "maxAge": "70",
-      "tags": [
-        "Aventure"
-      ],
+      "author": "Léna Dubois",
+      "coverImage": "https://picsum.photos/200/300?random=1",
+      "pages": "6",
+      "synopsis": "Un petit chat rêve de toucher la lune. Une nuit, son vœu se réalise et il découvre un monde magique.",
+      "duration": "15",
+      "minAge": "5",
+      "maxAge": "8",
+      "tags": ["Aventure", "Magie", "Animaux"],
       "content": [
-        "Je suis la page 1!","Et moi la 2!","je suis la 3!","On y est presque!","C'est fini!"
+        "Il était une fois un petit chat nommé Moka.",
+        "Chaque nuit, il regardait la lune briller depuis le toit de la grange.",
+        "Un soir, une étoile filante passa et Moka fit un vœu.",
+        "Soudain, ses pattes quittèrent le sol, il volait vers la lune!",
+        "Sur la lune, il rencontra des souris lumineuses qui dansaient.",
+        "Quand il rentra sur Terre, il garda un éclat de lune dans ses yeux."
+      ]
+    },
+    {
+      "title": "Le Grand Voyage de Pomme la coccinelle",
+      "id": "2",
+      "author": "Jean Petitpois",
+      "coverImage": "https://picsum.photos/200/300?random=2",
+      "pages": "5",
+      "synopsis": "Pomme, une petite coccinelle curieuse, décide de découvrir le monde au-delà de son jardin.",
+      "duration": "12",
+      "minAge": "4",
+      "maxAge": "7",
+      "tags": ["Découverte", "Nature", "Amitié"],
+      "content": [
+        "Pomme la coccinelle vivait dans un grand jardin plein de fleurs.",
+        "Un matin, elle vit un papillon s’envoler et voulut partir, elle aussi.",
+        "En route, elle rencontra une fourmi pressée et un escargot philosophe.",
+        "Ils lui montrèrent qu’on peut voyager même sans ailes.",
+        "Pomme revint chez elle, le cœur plein de souvenirs."
+      ]
+    },
+    {
+      "title": "Le Roi des Neiges Perdues",
+      "id": "3",
+      "author": "Nora Clément",
+      "coverImage": "https://picsum.photos/200/300?random=3",
+      "pages": "7",
+      "synopsis": "Un petit garçon part à la recherche du roi des neiges disparu pour sauver son village du froid éternel.",
+      "duration": "18",
+      "minAge": "6",
+      "maxAge": "9",
+      "tags": ["Fantastique", "Courage", "Aventure"],
+      "content": [
+        "L’hiver ne s’arrêtait plus dans le village de Tom.",
+        "Les arbres gelaient, les rivières dormaient sous la glace.",
+        "Tom décida de retrouver le roi des neiges, disparu depuis longtemps.",
+        "Il traversa la forêt blanche, affronta le vent et la solitude.",
+        "Au sommet d’une montagne, il trouva un trône vide et une couronne gelée.",
+        "En posant la couronne sur sa tête, il fit fondre le froid et rendit le roi à son royaume.",
+        "Le printemps revint, et Tom devint le héros du village."
+      ]
+    },
+    {
+      "title": "Zoé et le Dragon des Bulles",
+      "id": "4",
+      "author": "Camille Leroy",
+      "coverImage": "https://picsum.photos/200/300?random=4",
+      "pages": "6",
+      "synopsis": "Zoé découvre un petit dragon qui souffle des bulles au lieu de feu. Ensemble, ils apprennent à croire en leur différence.",
+      "duration": "14",
+      "minAge": "5",
+      "maxAge": "8",
+      "tags": ["Amitié", "Différence", "Magie"],
+      "content": [
+        "Zoé aimait les bulles plus que tout au monde.",
+        "Un jour, une bulle géante éclata devant elle, et un petit dragon en sortit!",
+        "Le dragon s’appelait Pshiit, et ses bulles avaient des couleurs incroyables.",
+        "Mais les autres dragons se moquaient de lui, car il ne crachait pas de feu.",
+        "Zoé lui montra qu’être différent, c’est ce qui rend spécial.",
+        "Ensemble, ils remplirent le ciel de bulles arc-en-ciel."
+      ]
+    },
+    {
+      "title": "Le Trésor du Vieux Chêne",
+      "id": "5",
+      "author": "Arthur Martin",
+      "coverImage": "https://picsum.photos/200/300?random=5",
+      "pages": "5",
+      "synopsis": "Trois amis découvrent une carte au trésor cachée dans un vieux tronc d’arbre.",
+      "duration": "10",
+      "minAge": "6",
+      "maxAge": "9",
+      "tags": ["Mystère", "Aventure", "Amitié"],
+      "content": [
+        "Au fond du jardin, un vieux chêne gardait ses secrets.",
+        "Léa, Hugo et Max trouvèrent un parchemin dans son tronc.",
+        "C’était une carte menant à un trésor oublié.",
+        "Ils creusèrent sous la colline et trouvèrent… une boîte remplie de lettres d’enfants d’autrefois!",
+        "Le vrai trésor, c’était les histoires qu’ils contenaient."
       ]
     }
+
   ]
 }
