@@ -77,6 +77,12 @@ class BookProgressViewModel(private val bookProgressDao: BookProgressDao) : View
         }
     }
 
+    fun updateBookPage(bookId: Int, pagesRead: Int) {
+        viewModelScope.launch {
+            bookProgressDao.updateBookPage(bookId, pagesRead)
+        }
+    }
+
     companion object {
         private lateinit var instance: BookProgressViewModel
 
