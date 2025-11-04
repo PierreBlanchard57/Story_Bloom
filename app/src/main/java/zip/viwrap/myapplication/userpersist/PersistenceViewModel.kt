@@ -11,6 +11,7 @@ import java.util.concurrent.Executors
 class BookProgressViewModel(private val bookProgressDao: BookProgressDao) : ViewModel() {
     private val _bookDetails = MutableStateFlow<List<BookProgressDetail?>>(arrayListOf())
     val bookDetails get() = _bookDetails.asStateFlow()
+    var isTimeSpanStarted: Boolean=false;
 
     fun removeBookProgressFromDB(bookId: Int) {
         viewModelScope.launch {
@@ -84,13 +85,13 @@ class BookProgressViewModel(private val bookProgressDao: BookProgressDao) : View
     }
 
     fun startTimespan() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             bookProgressDao.startTimespan()
         }
     }
 
     fun stopTimespan() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             bookProgressDao.stopTimespan()
         }
     }

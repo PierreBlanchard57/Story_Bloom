@@ -1,5 +1,6 @@
 package zip.viwrap.myapplication
 
+import android.os.AsyncTask
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -69,6 +70,7 @@ import coil3.compose.AsyncImage
 import zip.viwrap.myapplication.userpersist.BookProgressViewModel
 import zip.viwrap.myapplication.viewmodel.StoryState
 import zip.viwrap.myapplication.viewmodel.StoryViewModel
+import kotlin.concurrent.thread
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -94,7 +96,8 @@ fun StoryBloom() {
                     Row(modifier = Modifier.background(Color(0xFF9C27B0)).fillMaxWidth().padding(0.dp,20.dp,0.dp,0.dp)) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "", tint = Color.White,
-                            modifier=Modifier.clickable(){//dbvm.stopTimespan()
+                            modifier=Modifier.clickable(){
+                                if(dbvm.isTimeSpanStarted)  dbvm.stopTimespan();println("timespan stopped!")
                                 navController.popBackStack(route = "List", inclusive = false)}
                                 .size(40.dp))
                         Text("LECTURE", color = Color.White,
@@ -147,7 +150,7 @@ fun StoryBloom() {
                         val dbvm = BookProgressViewModel.getViewModel()
                         val pagesRead =dbvm.getPagesRead(storyState.selectedStory?.id ?: 0).value
                         currentPage=pagesRead+1
-                        navController.navigate("StoryReader")
+                        navController.navigate("StoryReader");
                     }
                 }
                 composable("Achievements") {
