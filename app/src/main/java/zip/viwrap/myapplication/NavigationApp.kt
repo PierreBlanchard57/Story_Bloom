@@ -45,6 +45,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -168,6 +169,8 @@ fun StoryBloom() {
 fun StoryBloomList(storyState: StoryState, onClickDetails: (story: Story) -> Unit) {
     var searchTxt by remember { mutableStateOf("") }
     var list = remember { mutableStateListOf<String>() }
+    val dbvm = BookProgressViewModel.getViewModel()
+
     Column(modifier = Modifier
         .fillMaxSize().verticalScroll(rememberScrollState())
     ) {
@@ -214,13 +217,26 @@ fun StoryBloomList(storyState: StoryState, onClickDetails: (story: Story) -> Uni
                     ok
                 }
             }
+            val pagesMap = stories.associate { story ->
+                val pages = produceState(initialValue = 0, story.id) {
+                    dbvm.getPagesRead(story.id).collect { value = it }
+                }.value
+                story.id to pages
+            }
+            val continueFiltered = remember(stories, pagesMap) {
+                stories.filter { story ->
+                    val pages = pagesMap[story.id] ?: 0
+                    pages != 0 && pages != story.pages
+                }
+            }
+
             Row{
                 Icon(Icons.Filled.PlayArrow,"",tint = Color(0xFF4CAF50))
                 Text("Continuer la lecture")
             }
             LazyRow {
 
-                items(tagFiltered) {
+                items(continueFiltered) {
                         story ->
                     StoryCard(story,onClickDetails)
                 }
@@ -341,41 +357,37 @@ fun StoryBloomDetails(storyState: StoryState,onPlay:(Story)->Unit) {
     val pagesRead by dbvm.getPagesRead(story.id).collectAsState()
     val progress = if (story.pages > 0) pagesRead.toFloat() / story.pages else 0f
 
-    if (story != null) {
-        Column (modifier = Modifier.fillMaxSize().padding(20.dp).verticalScroll(scrollState), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column (modifier = Modifier.fillMaxSize().padding(20.dp).verticalScroll(scrollState), horizontalAlignment = Alignment.CenterHorizontally) {
 
-            AsyncImage(
-                model = story.coverImage,
-                contentDescription = "Movie poster",
-                Modifier.fillMaxWidth().height(300.dp),
-                contentScale = ContentScale.Fit
-            )
-            Text(story.title, fontSize = 20.sp)
-            Row (horizontalArrangement = Arrangement.spacedBy(5.dp)){
-                story.tags.forEach {
-                    NormalTag(it)
-                }
+        AsyncImage(
+            model = story.coverImage,
+            contentDescription = "Movie poster",
+            Modifier.fillMaxWidth().height(300.dp),
+            contentScale = ContentScale.Fit
+        )
+        Text(story.title, fontSize = 20.sp)
+        Row (horizontalArrangement = Arrangement.spacedBy(5.dp)){
+            story.tags.forEach {
+                NormalTag(it)
             }
-            Text(story.synopsis, textAlign = TextAlign.Justify, modifier = Modifier.padding(8.dp))
-            ReadButton(story,onPlay)
-            Row{
-                Icon(Icons.Rounded.Info,"")
-                Text("${story.duration} min",color = Color.Gray, modifier = Modifier.padding(0.dp,0.dp,10.dp,0.dp))
-                Icon(Icons.Rounded.AccountCircle,"")
-                Text("${story.minAge}-${story.maxAge} ans",color = Color.Gray)
-            }
-            LinearProgressIndicator(
-                progress = { progress },
-                color = Color(0xFF9C27B0),
-                gapSize = 0.dp,
-                strokeCap = StrokeCap.Butt,
-                modifier = Modifier.padding(10.dp,10.dp,10.dp,10.dp).height(10.dp),
-                drawStopIndicator = {}
-            )
-
-            Text("${(progress*100).toInt()} %", fontSize = 20.sp)
         }
-    } else {
-        Text("Aucun film à afficher.")
+        Text(story.synopsis, textAlign = TextAlign.Justify, modifier = Modifier.padding(8.dp))
+        ReadButton(story,onPlay)
+        Row{
+            Icon(Icons.Rounded.Info,"")
+            Text("${story.duration} min",color = Color.Gray, modifier = Modifier.padding(0.dp,0.dp,10.dp,0.dp))
+            Icon(Icons.Rounded.AccountCircle,"")
+            Text("${story.minAge}-${story.maxAge} ans",color = Color.Gray)
+        }
+        LinearProgressIndicator(
+            progress = { progress },
+            color = Color(0xFF9C27B0),
+            gapSize = 0.dp,
+            strokeCap = StrokeCap.Butt,
+            modifier = Modifier.padding(10.dp,10.dp,10.dp,10.dp).height(10.dp),
+            drawStopIndicator = {}
+        )
+
+        Text("${(progress*100).toInt()} %", fontSize = 20.sp)
     }
 }
