@@ -138,18 +138,17 @@ fun StoryBloom() {
                         NavigationItem(Icons.Outlined.Lock, "Contrôle", { navController.navigate("Control") { popUpTo("List") } })
                     ))
                 }
-                "StoryReader"->{
-                    PageButtons(requireNotNull(storyState.selectedStory),currentPage,{
-                        if(currentPage>1)currentPage--
+                "StoryReader" -> {
+                    PageButtons(requireNotNull(storyState.selectedStory), currentPage,{
+                        if(currentPage > 1 ) currentPage--
                     },{
-                        if(currentPage<storyState.selectedStory.pages) {
+                        if(currentPage < storyState.selectedStory.pages) {
                             currentPage++
-                            if(currentPage>dbvm.getPagesRead(storyState.selectedStory.id).value)
-                                dbvm.updateBookPage(storyState.selectedStory.id,currentPage)
+                            dbvm.updateBookPage(storyState.selectedStory.id,currentPage)
                         }
                     })
                 }
-                else->{
+                else -> {
                     //si autre,on affiche pas la botombar
                 }
             }
