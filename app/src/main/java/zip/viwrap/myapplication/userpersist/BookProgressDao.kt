@@ -55,9 +55,9 @@ interface BookProgressDao {
     @Query("INSERT INTO timespanDetail(start, stop) VALUES(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)")
     fun startTimespan()
 
-    @Query("UPDATE timespanDetail SET stop = CURRENT_TIMESTAMP WHERE start = (SELECT start FROM timespanDetail ORDER BY start LIMIT 1)")
+    @Query("UPDATE timespanDetail SET stop = CURRENT_TIMESTAMP WHERE start = (SELECT start FROM timespanDetail ORDER BY start DESC LIMIT 1)")
     fun stopTimespan()
 
-    @Query("SELECT SUM(stop - start) FROM timespanDetail WHERE stop BETWEEN datetime(date()) AND datetime()")
+    @Query("SELECT SUM(unixepoch(stop) - unixepoch(start)) FROM timespanDetail WHERE stop BETWEEN datetime(date()) AND datetime()")
     fun getTimespanSecondsToday(): Flow<Int>
 }

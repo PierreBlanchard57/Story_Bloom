@@ -362,7 +362,7 @@ fun StoryBloomControl(storyState: StoryState) {
         item {
             val minutesState by settingsVM.getTimeLimit().collectAsState()
             val minsLimit = (minutesState as RangePreference).value.roundToInt()
-            WarningBar((minsLimit - mins).toString() + " mins restantes.")
+            WarningBar(0.coerceAtLeast(minsLimit - mins).toString() + " mins restantes.")
         }
         item { Text("Paramètres de contrôle") }
         items(prefs) {
