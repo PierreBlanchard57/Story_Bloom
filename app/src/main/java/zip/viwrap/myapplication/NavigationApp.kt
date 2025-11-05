@@ -97,7 +97,7 @@ fun StoryBloom() {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "", tint = Color.White,
                             modifier=Modifier.clickable(){
-                                if(dbvm.isTimeSpanStarted)  dbvm.stopTimespan();println("timespan stopped!")
+                                if(dbvm.isTimeSpanStarted)  {dbvm.stopTimespan();println("timespan stopped!")}
                                 navController.popBackStack(route = "List", inclusive = false)}
                                 .size(40.dp))
                         Text("LECTURE", color = Color.White,
