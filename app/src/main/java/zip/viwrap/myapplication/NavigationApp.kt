@@ -319,7 +319,9 @@ fun StoryBloomAchievements(state: StoryState) {
                 // Progression précise
                 AchievementTile(w, painterResource(R.drawable.book), "$progress% avant niveau $nextLevel.")
 
-                AchievementTile(w, painterResource(R.drawable.book), "99% de trucs.")
+                val seconds by pvm.getSecondsSpentAllTime().collectAsState()
+                val timeStr = if (seconds < 3600) "${(seconds / 60)} minutes" else "${(seconds / 3600f).roundToInt()} heures"
+                AchievementTile(w, painterResource(R.drawable.book), "$timeStr au total.")
                 AchievementTile(w, painterResource(R.drawable.book), "$remBooks livres restants.")
             }
         }

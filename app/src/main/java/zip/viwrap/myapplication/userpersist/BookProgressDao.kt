@@ -60,4 +60,7 @@ interface BookProgressDao {
 
     @Query("SELECT SUM(unixepoch(stop) - unixepoch(start)) FROM timespanDetail WHERE stop BETWEEN datetime(date()) AND datetime()")
     fun getTimespanSecondsToday(): Flow<Int>
+
+    @Query("SELECT SUM(unixepoch(stop) - unixepoch(start)) FROM timespanDetail")
+    fun getTimespanSecondsAllTime(): Flow<Int>
 }

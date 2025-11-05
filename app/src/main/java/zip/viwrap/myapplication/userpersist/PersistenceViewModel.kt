@@ -48,6 +48,14 @@ class BookProgressViewModel(private val bookProgressDao: BookProgressDao) : View
         )
     }
 
+    fun getSecondsSpentAllTime(): StateFlow<Int> {
+        return bookProgressDao.getTimespanSecondsAllTime().stateIn(
+            viewModelScope,
+            started = SharingStarted.Lazily,
+            initialValue = 0
+        )
+    }
+
     fun getAgeLimit(): StateFlow<Preference?> {
         return bookProgressDao.getPreference("age_filter").stateIn(
             viewModelScope,
