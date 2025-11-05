@@ -25,6 +25,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,6 +42,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.*
 import coil3.compose.AsyncImage
+import zip.viwrap.myapplication.userpersist.BookProgressViewModel
+import kotlin.math.roundToInt
 
 // Tuile avec graphique du succès en bas à gauche, et statistique (avec nombre clé en évidence)
 @Composable
@@ -115,6 +119,10 @@ fun BadgeTile(width: Dp, _painter: Painter, _title: String, unlockPredicate: Boo
 // Tuile horizontale
 @Composable
 fun ReaderProgressTile(book: Story) {
+    val dbvm = BookProgressViewModel.getViewModel()
+    val progress by dbvm.getPagesRead(book.id).collectAsState()
+    val totalPages = book.pages;
+    val percent = (progress.toFloat() / totalPages.toFloat() * 100).roundToInt()
     Box(Modifier
         .clip(RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp))
         .background(color = Color(0xFFAC52DC))
@@ -131,10 +139,10 @@ fun ReaderProgressTile(book: Story) {
                     Row {
                         Text(book.title, color = Color(0xFFFFFFFF))
                         Spacer(Modifier.weight(1f))
-                        Text("90%", fontSize = 30.sp, fontFamily = TitleFont.Family, color = Color(0xFFFFFFFF))
+                        Text("$percent%", fontSize = 30.sp, fontFamily = TitleFont.Family, color = Color(0xFFFFFFFF))
                     }
                     LinearProgressIndicator(
-                        progress = { 0.3f },
+                        progress = { percent.toFloat() * 0.01f },
                         gapSize = 0.dp,
                         drawStopIndicator = {},
                         strokeCap = StrokeCap.Square,
