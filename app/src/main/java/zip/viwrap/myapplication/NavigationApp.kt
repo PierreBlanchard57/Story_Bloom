@@ -1,6 +1,7 @@
 package zip.viwrap.myapplication
 
 import android.os.AsyncTask
+import android.speech.tts.TextToSpeech
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -42,6 +43,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -57,6 +59,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -70,12 +73,31 @@ import coil3.compose.AsyncImage
 import zip.viwrap.myapplication.userpersist.BookProgressViewModel
 import zip.viwrap.myapplication.viewmodel.StoryState
 import zip.viwrap.myapplication.viewmodel.StoryViewModel
+import java.util.Locale
 import kotlin.concurrent.thread
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StoryBloom() {
+    //Chargement du TTS En avance,pour qu'il soit prêt le moment venu!
+    val context = LocalContext.current
+    val tts = remember { mutableStateOf<TextToSpeech?>(null) }
+    var isTtsReady = remember { mutableStateOf(false) }
+    DisposableEffect(context) {
+        val textToSpeech = TextToSpeech(context) { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                tts.value?.language = Locale.FRANCE
+                isTtsReady.value=true
+            }
+        }
+        tts.value = textToSpeech
+
+        onDispose {
+            textToSpeech.stop()
+            textToSpeech.shutdown()
+        }
+    }
     val navController = rememberNavController()
 
     // pour la movie on peut aussi utiliser un "remember" pour voir les changements.
@@ -160,7 +182,7 @@ fun StoryBloom() {
                     StoryBloomControl(storyState)
                 }
                 composable("StoryReader"){
-                    StoryReader(requireNotNull(storyState.selectedStory),currentPage)
+                    StoryReader(requireNotNull(storyState.selectedStory),currentPage,tts)
                 }
             }
         }
