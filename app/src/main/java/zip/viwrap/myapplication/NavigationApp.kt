@@ -292,6 +292,9 @@ fun StoryBloomAchievements(state: StoryState) {
     val progress = (calculateLevelProgress(level) * 100).toInt()
     val nextLevel = getLevelBucket(level) + 1
 
+    val numBooks = state.stories.size;
+    val remBooks = numBooks - booksStarted;
+
     LazyColumn (modifier = Modifier.fillMaxWidth().padding(10.dp), verticalArrangement =
         Arrangement.spacedBy(10.dp)) {
         item { Text("Succès") }
@@ -318,7 +321,7 @@ fun StoryBloomAchievements(state: StoryState) {
                 AchievementTile(w, painterResource(R.drawable.book), "$progress% avant niveau $nextLevel.")
 
                 AchievementTile(w, painterResource(R.drawable.book), "99% de trucs.")
-                AchievementTile(w, painterResource(R.drawable.book), "1 livre restant.")
+                AchievementTile(w, painterResource(R.drawable.book), "$remBooks livres restants.")
             }
         }
         item { Text("Badges") }
