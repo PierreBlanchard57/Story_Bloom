@@ -36,13 +36,17 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
@@ -72,6 +76,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil3.compose.AsyncImage
 import zip.viwrap.myapplication.userpersist.BookProgressViewModel
+import zip.viwrap.myapplication.userpersist.PasswordDetail
 import zip.viwrap.myapplication.viewmodel.StoryState
 import zip.viwrap.myapplication.viewmodel.StoryViewModel
 import java.util.Locale
@@ -171,7 +176,12 @@ fun StoryBloom() {
             padding ->
         // La taille de la topbar qui ne prend pas d'espace concret
         Column (modifier = Modifier.padding(padding)) {
-
+            val hasPass by dbvm.hasPassword.collectAsState()
+            if(hasPass == null)
+                StoryBloomAuth {
+                    dbvm.setPassword(PasswordDetail(it))
+                    navController.navigate("Control") { popUpTo("List") }
+                }
             NavHost(navController = navController, startDestination = "List") {
                 composable("List") {
                     StoryBloomList(storyState) {
@@ -200,6 +210,54 @@ fun StoryBloom() {
                 }
                 composable("StoryReader"){
                     StoryReader(requireNotNull(storyState.selectedStory),currentPage,tts)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun StoryBloomAuth(onFinish: (String) -> Unit) {
+    val dbvm = BookProgressViewModel.getViewModel()
+    val pass by dbvm.hasPassword.collectAsState()
+
+    var hasPass by remember { mutableStateOf(pass != null) }
+    var open by remember { mutableStateOf(pass == null) }
+    var openPasswordDefine by remember { mutableStateOf(pass != null) }
+    val state = rememberModalBottomSheetState(
+        confirmValueChange = {
+            it != SheetValue.Hidden
+        }
+    )
+
+    val wordToTest = "antépénultième"
+    var inputText by remember { mutableStateOf("") }
+    var canDefinePassword by remember { mutableStateOf(false) }
+
+    if (open) {
+        ModalBottomSheet(onDismissRequest = { }, sheetState = state) {
+            Text("Mise en route de l'application", Modifier.padding(16.dp).fillMaxWidth(), fontFamily = TitleFont.Family, textAlign = TextAlign.Center)
+            Text("(Dispositif de sécurité pour que l'enfant doive demander à un adulte mais ici il faut juste réécrire le mot \"antépénultième\")", Modifier.padding(16.dp))
+            Column (modifier = Modifier.padding(20.dp)) {
+                TextField(inputText, onValueChange = { inputText = it; canDefinePassword = inputText.trim() == wordToTest }, label = { Text("Mot à valider") }, modifier = Modifier.fillMaxWidth())
+                Button(onClick = { open = false; openPasswordDefine = true }, enabled = canDefinePassword, modifier = Modifier.fillMaxWidth()) {
+                    Text("Définir un mot de passe")
+                }
+            }
+        }
+    }
+
+    if (openPasswordDefine) {
+        inputText = ""
+        ModalBottomSheet(onDismissRequest = { }, sheetState = state) {
+            Text(if (hasPass) "Confirmer mot de passe" else "Définir un mot de passe", Modifier.padding(16.dp).fillMaxWidth(), fontFamily = TitleFont.Family, textAlign = TextAlign.Center)
+            if (!hasPass)
+                Text("Il sera utilisé pour configurer l'application.", Modifier.padding(16.dp))
+            Column (modifier = Modifier.padding(20.dp)) {
+                TextField(inputText, onValueChange = { inputText = it }, label = { Text("Nouveau mot de passe") }, modifier = Modifier.fillMaxWidth())
+                Button(onClick = { openPasswordDefine = false; onFinish(inputText) }, enabled = inputText.isNotEmpty(), modifier = Modifier.fillMaxWidth()) {
+                    Text("Passer à la configuration")
                 }
             }
         }
@@ -370,10 +428,16 @@ fun StoryBloomAchievements(state: StoryState) {
 
 @Composable
 fun StoryBloomControl(storyState: StoryState) {
+    var showControls by remember { mutableStateOf(false) }
     val settingsVM = BookProgressViewModel.getViewModel()
     val prefs by settingsVM.preferences.collectAsState()
     val seconds by settingsVM.getSecondsSpent().collectAsState()
     val mins = (seconds / 60)
+
+    // Contrôle du mot de passe
+    val pw by settingsVM.hasPassword.collectAsState()
+    var inputText by remember { mutableStateOf("") }
+
     LazyColumn (modifier = Modifier.fillMaxWidth().padding(10.dp), verticalArrangement =
         Arrangement.spacedBy(10.dp)) {
         item {
@@ -385,11 +449,17 @@ fun StoryBloomControl(storyState: StoryState) {
             WarningBar(0.coerceAtLeast(minsLimit - mins).toString() + " mins restantes.")
         }
         item { Text("Paramètres de contrôle") }
-        items(prefs) {
-            if (it.data is RangePreference)
-                LockedSliderEditor(it.key, it.data)
-            else
-                PreferenceEditor(it.key, it.data)
+        if (showControls) {
+            items(prefs) {
+                if (it.data is RangePreference)
+                    LockedSliderEditor(it.key, it.data)
+                else
+                    PreferenceEditor(it.key, it.data)
+            }
+        } else {
+            item {
+                TextField(inputText, onValueChange = { inputText = it; showControls = inputText.trim() == pw?.password }, label = { Text("Mot de passe") }, modifier = Modifier.fillMaxWidth())
+            }
         }
     }
 }

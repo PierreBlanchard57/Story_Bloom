@@ -72,6 +72,18 @@ class BookProgressViewModel(private val bookProgressDao: BookProgressDao) : View
         )
     }
 
+    val hasPassword: StateFlow<PasswordDetail?> = bookProgressDao.hasPasswordDefined().stateIn(
+        viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = null
+    )
+
+    fun setPassword(pw: PasswordDetail) {
+        viewModelScope.launch(Dispatchers.IO) {
+            bookProgressDao.upsert(pw)
+        }
+    }
+
     val preferences: StateFlow<List<PreferenceDetail>> = bookProgressDao.getPreferences().stateIn(
         viewModelScope,
         started = SharingStarted.Eagerly,

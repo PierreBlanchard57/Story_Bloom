@@ -63,4 +63,10 @@ interface BookProgressDao {
 
     @Query("SELECT SUM(unixepoch(stop) - unixepoch(start)) FROM timespanDetail")
     fun getTimespanSecondsAllTime(): Flow<Int>
+
+    @Query("SELECT * from passwordDetail LIMIT 1")
+    fun hasPasswordDefined(): Flow<PasswordDetail?>
+
+    @Upsert
+    fun upsert(passwordDetail: PasswordDetail)
 }
