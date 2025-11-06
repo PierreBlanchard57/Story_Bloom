@@ -32,6 +32,7 @@ class StoryMapper {
                 maxAge = maxAge,
                 tags = tags,
                 content = content,
+                imageContent = imageContent
             )
         }
 

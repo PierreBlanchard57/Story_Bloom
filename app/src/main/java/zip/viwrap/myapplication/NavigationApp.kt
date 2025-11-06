@@ -112,7 +112,6 @@ fun StoryBloom() {
     val viewModel: StoryViewModel= viewModel()
     val storyState = viewModel.storiesStateFlow.collectAsState().value
 
-
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
     var currentPage by remember { mutableStateOf(0) }
 
@@ -397,14 +396,11 @@ fun StoryBloomControl(storyState: StoryState) {
 @Composable
 fun StoryBloomDetails(storyState: StoryState,onPlay:(Story)->Unit) {
     val story:Story = requireNotNull(storyState.selectedStory)
-
-    val scrollState = rememberScrollState()
-
     val dbvm = BookProgressViewModel.getViewModel()
     val pagesRead by dbvm.getPagesRead(story.id).collectAsState()
     val progress = if (story.pages > 0) pagesRead.toFloat() / story.pages else 0f
 
-    Column (modifier = Modifier.fillMaxSize().padding(20.dp).verticalScroll(scrollState), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column (modifier = Modifier.fillMaxSize().padding(20.dp).verticalScroll(rememberScrollState()), horizontalAlignment = Alignment.CenterHorizontally) {
 
         AsyncImage(
             model = story.coverImage,

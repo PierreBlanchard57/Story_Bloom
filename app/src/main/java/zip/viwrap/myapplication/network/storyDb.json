@@ -1,6 +1,6 @@
 {
   "Stories": [
-        {
+    {
       "title": "Le Chat qui volait la lune",
       "id": "1",
       "author": "Léna Dubois",
@@ -18,6 +18,14 @@
         "Soudain, ses pattes quittèrent le sol, il volait vers la lune!",
         "Sur la lune, il rencontra des souris lumineuses qui dansaient.",
         "Quand il rentra sur Terre, il garda un éclat de lune dans ses yeux."
+      ],
+      "imageContent": [
+        "https://picsum.photos/seed/1-1/200/300",
+        "https://picsum.photos/seed/1-2/200/300",
+        "https://picsum.photos/seed/1-3/200/300",
+        "https://picsum.photos/seed/1-4/200/300",
+        "https://picsum.photos/seed/1-5/200/300",
+        "https://picsum.photos/seed/1-6/200/300"
       ]
     },
     {
@@ -37,6 +45,13 @@
         "En route, elle rencontra une fourmi pressée et un escargot philosophe.",
         "Ils lui montrèrent qu’on peut voyager même sans ailes.",
         "Pomme revint chez elle, le cœur plein de souvenirs."
+      ],
+      "imageContent": [
+        "https://picsum.photos/seed/2-1/200/300",
+        "https://picsum.photos/seed/2-2/200/300",
+        "https://picsum.photos/seed/2-3/200/300",
+        "https://picsum.photos/seed/2-4/200/300",
+        "https://picsum.photos/seed/2-5/200/300"
       ]
     },
     {
@@ -58,6 +73,15 @@
         "Au sommet d’une montagne, il trouva un trône vide et une couronne gelée.",
         "En posant la couronne sur sa tête, il fit fondre le froid et rendit le roi à son royaume.",
         "Le printemps revint, et Tom devint le héros du village."
+      ],
+      "imageContent": [
+        "https://picsum.photos/seed/3-1/200/300",
+        "https://picsum.photos/seed/3-2/200/300",
+        "https://picsum.photos/seed/3-3/200/300",
+        "https://picsum.photos/seed/3-4/200/300",
+        "https://picsum.photos/seed/3-5/200/300",
+        "https://picsum.photos/seed/3-6/200/300",
+        "https://picsum.photos/seed/3-7/200/300"
       ]
     },
     {
@@ -78,6 +102,14 @@
         "Mais les autres dragons se moquaient de lui, car il ne crachait pas de feu.",
         "Zoé lui montra qu’être différent, c’est ce qui rend spécial.",
         "Ensemble, ils remplirent le ciel de bulles arc-en-ciel."
+      ],
+      "imageContent": [
+        "https://picsum.photos/seed/4-1/200/300",
+        "https://picsum.photos/seed/4-2/200/300",
+        "https://picsum.photos/seed/4-3/200/300",
+        "https://picsum.photos/seed/4-4/200/300",
+        "https://picsum.photos/seed/4-5/200/300",
+        "https://picsum.photos/seed/4-6/200/300"
       ]
     },
     {
@@ -97,8 +129,14 @@
         "C’était une carte menant à un trésor oublié.",
         "Ils creusèrent sous la colline et trouvèrent… une boîte remplie de lettres d’enfants d’autrefois!",
         "Le vrai trésor, c’était les histoires qu’ils contenaient."
+      ],
+      "imageContent": [
+        "https://picsum.photos/seed/5-1/200/300",
+        "https://picsum.photos/seed/5-2/200/300",
+        "https://picsum.photos/seed/5-3/200/300",
+        "https://picsum.photos/seed/5-4/200/300",
+        "https://picsum.photos/seed/5-5/200/300"
       ]
     }
-
   ]
 }
