@@ -82,8 +82,8 @@ import kotlin.math.roundToInt
 @Composable
 fun StoryBloom() {
     val dbvm = BookProgressViewModel.getViewModel()
-    val timeToday=dbvm.getSecondsSpent().collectAsState().value
-    val minutesState =dbvm.getTimeLimit().collectAsState().value
+    val timeToday by dbvm.getSecondsSpent().collectAsState()
+    val minutesState by dbvm.getTimeLimit().collectAsState()
     val minsLimit = (minutesState as RangePreference).value.roundToInt()
 
     //Chargement du TTS En avance,pour qu'il soit prêt le moment venu!
@@ -115,8 +115,6 @@ fun StoryBloom() {
 
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
     var currentPage by remember { mutableStateOf(0) }
-
-
 
     Scaffold (
         topBar = {
