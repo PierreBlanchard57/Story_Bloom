@@ -309,7 +309,7 @@ fun StoryBloomAchievements(state: StoryState) {
     val nextLevel = getLevelBucket(level) + 1
 
     val numBooks = state.stories.size;
-    val remBooks = numBooks - booksStarted;
+    val remBooks = 0.coerceAtLeast(numBooks - booksStarted);
 
     LazyColumn (modifier = Modifier.fillMaxWidth().padding(10.dp), verticalArrangement =
         Arrangement.spacedBy(10.dp)) {
