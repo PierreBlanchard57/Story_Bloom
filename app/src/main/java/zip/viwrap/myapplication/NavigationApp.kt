@@ -83,8 +83,7 @@ import kotlin.math.roundToInt
 fun StoryBloom() {
     val dbvm = BookProgressViewModel.getViewModel()
     val timeToday=dbvm.getSecondsSpent().collectAsState().value
-    val settingsVM = BookProgressViewModel.getViewModel()
-    val minutesState =settingsVM.getTimeLimit().collectAsState().value
+    val minutesState =dbvm.getTimeLimit().collectAsState().value
     val minsLimit = (minutesState as RangePreference).value.roundToInt()
 
     //Chargement du TTS En avance,pour qu'il soit prêt le moment venu!
