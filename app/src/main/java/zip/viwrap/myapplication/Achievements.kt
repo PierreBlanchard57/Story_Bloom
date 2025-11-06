@@ -137,7 +137,7 @@ fun ReaderProgressTile(book: Story) {
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.SpaceEvenly) {
                     Row {
-                        Text(book.title, color = Color(0xFFFFFFFF))
+                        Text(book.title, color = Color(0xFFFFFFFF), modifier = Modifier.weight(5f), lineHeight = 18.sp)
                         Spacer(Modifier.weight(1f))
                         Text("$percent%", fontSize = 30.sp, fontFamily = TitleFont.Family, color = Color(0xFFFFFFFF))
                     }
