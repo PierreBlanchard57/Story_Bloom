@@ -2,6 +2,7 @@ package zip.viwrap.myapplication
 
 import android.os.AsyncTask
 import android.speech.tts.TextToSpeech
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -80,6 +81,12 @@ import kotlin.math.roundToInt
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StoryBloom() {
+    val dbvm = BookProgressViewModel.getViewModel()
+    val timeToday=dbvm.getSecondsSpent().collectAsState().value
+    val settingsVM = BookProgressViewModel.getViewModel()
+    val minutesState =settingsVM.getTimeLimit().collectAsState().value
+    val minsLimit = (minutesState as RangePreference).value.roundToInt()
+
     //Chargement du TTS En avance,pour qu'il soit prêt le moment venu!
     val context = LocalContext.current
     val tts = remember { mutableStateOf<TextToSpeech?>(null) }
@@ -106,9 +113,11 @@ fun StoryBloom() {
     val viewModel: StoryViewModel= viewModel()
     val storyState = viewModel.storiesStateFlow.collectAsState().value
 
-    val dbvm = BookProgressViewModel.getViewModel()
+
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
     var currentPage by remember { mutableStateOf(0) }
+
+
 
     Scaffold (
         topBar = {
@@ -176,10 +185,14 @@ fun StoryBloom() {
                 composable("Details") {
                     StoryBloomDetails(storyState){
                     story->
-                        val dbvm = BookProgressViewModel.getViewModel()
-                        val pagesRead =dbvm.getPagesRead(storyState.selectedStory?.id ?: 0).value
-                        currentPage=pagesRead+1
-                        navController.navigate("StoryReader");
+                        if(timeToday<minsLimit*60){
+                            val pagesRead =dbvm.getPagesRead(storyState.selectedStory?.id ?: 0).value
+                            currentPage=pagesRead+1
+                            navController.navigate("StoryReader");
+                        }else{
+                            Toast.makeText(context,"Plus de temps! Reviens demain!", Toast.LENGTH_SHORT).show()
+                        }
+
                     }
                 }
                 composable("Achievements") {
