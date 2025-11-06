@@ -84,7 +84,8 @@ fun StoryBloom() {
     val dbvm = BookProgressViewModel.getViewModel()
     val timeToday by dbvm.getSecondsSpent().collectAsState()
     val minutesState by dbvm.getTimeLimit().collectAsState()
-    val minsLimit = (minutesState as RangePreference).value.roundToInt()
+    val minsLimit = if(minutesState!=null)(minutesState as RangePreference).value.roundToInt()
+    else 15
 
     //Chargement du TTS En avance,pour qu'il soit prêt le moment venu!
     val context = LocalContext.current
