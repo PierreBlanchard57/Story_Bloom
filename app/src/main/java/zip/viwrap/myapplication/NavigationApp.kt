@@ -144,9 +144,15 @@ fun StoryBloom() {
                     PageButtons(requireNotNull(storyState.selectedStory), currentPage,{
                         if(currentPage > 1 ) currentPage--
                     },{
-                        if(currentPage < storyState.selectedStory.pages) {
+                        if(currentPage < storyState.selectedStory.pages+1) {
                             currentPage++
-                            dbvm.updateBookPage(storyState.selectedStory.id,currentPage)
+                            if(currentPage<=storyState.selectedStory.pages)
+                                dbvm.updateBookPage(storyState.selectedStory.id,currentPage)
+                            else {
+                                tts.value?.stop()
+                                tts.value?.speak("C'est fini!Bravo tu viens de lire une histoire!"
+                                    ,TextToSpeech.QUEUE_FLUSH,null,"")
+                            }
                         }
                     })
                 }
