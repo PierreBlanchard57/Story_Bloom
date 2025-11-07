@@ -20,7 +20,7 @@ class PreferenceTypeConverter {
 }
 
 @TypeConverters(PreferenceTypeConverter::class, DateConverter::class)
-@Database(version = 9, entities = [BookProgressDetail::class, PreferenceDetail::class, TimespanDetail::class, PasswordDetail::class], exportSchema = false)
+@Database(version = 11, entities = [BookProgressDetail::class, PreferenceDetail::class, TimespanDetail::class, PasswordDetail::class], exportSchema = false)
 abstract class UserPersistenceDatabase : RoomDatabase() {
     abstract fun getBookProgressDao(): BookProgressDao
 }

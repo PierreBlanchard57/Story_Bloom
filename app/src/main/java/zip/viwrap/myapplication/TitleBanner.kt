@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -41,6 +42,7 @@ fun TitleBanner() {
             .background(Brush.linearGradient(colorStops = colorStops,
                 start = Offset(0f,0f), end = Offset(200f,450f)))
             .padding(horizontal = 10.dp, vertical = 10.dp)
+            .fillMaxWidth()
     ) {
         Row {
             Image(painter = painterResource(R.drawable.book),

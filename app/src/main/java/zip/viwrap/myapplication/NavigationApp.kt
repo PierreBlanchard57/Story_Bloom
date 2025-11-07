@@ -275,7 +275,7 @@ fun StoryBloomList(storyState: StoryState, onClickDetails: (story: Story) -> Uni
         .fillMaxSize().verticalScroll(rememberScrollState())
     ) {
         TextField(value = searchTxt, onValueChange = { searchTxt = it }, modifier = Modifier
-            .width(350.dp).clip(RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp)) ,
+            .fillMaxWidth().clip(RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp)) ,
             leadingIcon = { Icon(imageVector = Icons.Filled.Search, contentDescription = "Search icon") },
             trailingIcon = {
                 if(searchTxt.isNotEmpty()) Icon(
@@ -445,7 +445,7 @@ fun StoryBloomControl(storyState: StoryState) {
         }
         item {
             val minutesState by settingsVM.getTimeLimit().collectAsState()
-            val minsLimit = (minutesState as RangePreference).value.roundToInt()
+            val minsLimit = ((minutesState as RangePreference?)?.value?.roundToInt() ?: 0)
             WarningBar(0.coerceAtLeast(minsLimit - mins).toString() + " mins restantes.")
         }
         item { Text("Paramètres de contrôle") }
