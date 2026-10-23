@@ -95,7 +95,7 @@ object KtorClient {
         endpoint: String,
         requestBody: In? = null,
     ): Out {
-        val baseUrl = "http://100.66.51.35:3000/"
+        val baseUrl = "http://192.168.1.116:3000/"
         //val baseUrl = "http://10.11.110.31:3000/"
         val url = baseUrl + endpoint
 

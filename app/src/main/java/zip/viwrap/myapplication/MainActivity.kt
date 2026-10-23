@@ -21,7 +21,7 @@ import zip.viwrap.myapplication.viewmodel.StoryViewModel
 // Référence :
 // https://gitlab.intech.dev/paul.dardaine/netfloux-ihm
 
-// npx json-server --watch app/src/main/java/zip/viwrap/myapplication/network/db.json
+// npx json-server --watch app/src/main/java/zip/viwrap/myapplication/network/storyDb.json
 
 object DefaultFont {
     val Family = FontFamily(
