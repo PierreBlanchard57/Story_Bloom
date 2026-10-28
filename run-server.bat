@@ -1,0 +1,1 @@
+ npx json-server app/src/main/java/zip/viwrap/myapplication/network/storyDb.json
